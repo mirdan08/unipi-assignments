@@ -1,0 +1,5 @@
+torch>=2.0
+river
+scikit-learn
+seaborn
+jupyter
