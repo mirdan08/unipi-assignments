@@ -96,24 +96,6 @@ void softmax_avx(const float *input, float *output, size_t K) {
 		}
 		__m256 exp_sum_rem256=_mm256_set_ps(exp_sum,0,0,0,0,0,0,0);
 		exp_sum256=_mm256_add_ps(exp_sum256,exp_sum_rem256);
-		/* 
-		int mask_values[8]={0,0,0,0,0,0,0,0};
-		for(int i=0;i<rest_K;++i){
-			mask_values[i] = -1;
-		}
-		
-		__m256i mask = _mm256_loadu_si256((__m256i_u*)mask_values);
-		__m256 output_rest256=_mm256_maskload_ps(&output[vect_K],mask);
-		__m256 input_rest256=_mm256_maskload_ps(&input[vect_K],mask);
-		
-		output_rest256=exp256_ps(
-			_mm256_sub_ps(
-				input_rest256,
-				acc_max256
-			)
-		);
-		exp_sum256=_mm256_add_ps(exp_sum256,output_rest256);
-		_mm256_maskstore_ps(&output[vect_K],mask,output_rest256); */
 	}
 
 
@@ -127,15 +109,17 @@ void softmax_avx(const float *input, float *output, size_t K) {
 		float values[8];
 		_mm256_storeu_ps(values, exp_sum256);
 
-
-
 		// Print all 8 values
-		printf("Values of expsum256 summed normally");
+		float v_sum=0;
+		for (int i = 0; i < 8; i++) {
+			v_sum+=values[i];
+		}
+		// Print all 8 values
 		float sum=0;
 		for (int i = 0; i < K; i++) {
 			sum+=output[i];
 		}
-		std::cout << sum << std::endl;
+		std::cout << v_sum << "sum from exp 256|normal sum " << sum << std::endl;
 		exp_sum256=_mm256_set1_ps(sum);
 	}else{
 		//same logic as before only now you have pairwise summations
