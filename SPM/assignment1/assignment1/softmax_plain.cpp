@@ -13,13 +13,19 @@ void softmax_plain(const float *input, float *output, size_t K) {
 		max_val = std::max(max_val, input[i]);
     }
 
+	std::cout << "max_val:" << max_val << std::endl;
+
     // computes all exponentials with the shift of max_val and the total sum
     float sum = 0.0f;
     for (size_t i = 0; i < K; ++i) {
         output[i] = std::exp(input[i] - max_val);
         sum += output[i];
     }
-
+	std::cout << "sum:" <<sum << std::endl;
+	std::cout << "sum before divide" <<std::endl;
+	for(int i=0;i<K;i++){
+		std::cout << output[i] << std::endl;
+	}
     // normalize by dividing for the total sum
     for (size_t i = 0; i < K; ++i) {
         output[i] /= sum;
