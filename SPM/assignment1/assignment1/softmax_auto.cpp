@@ -8,7 +8,7 @@
 void softmax_auto(const float* __restrict__ input, float* __restrict__ output, const size_t K) {
 	
 	float max_val = -std::numeric_limits<float>::infinity();
-//	#pragma GCC unroll 4
+	
 	for (size_t i = 0; i < K; ++i) {
 		max_val = std::max(max_val, input[i]);
 	}

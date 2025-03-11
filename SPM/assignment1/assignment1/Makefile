@@ -1,7 +1,7 @@
 CXX                = g++ -std=c++17
 OPTFLAGS	   = -O3
-AUTOFLAGS          = -ftree-vectorize -fopt-info-vec-missed -fopt-info-vec -march=native -funroll-loops
-AVXFLAGS           = -mavx -march=native
+AUTOFLAGS          = -ftree-vectorize -fopt-info-vec-missed -fopt-info-vec -march=native -funroll-loops -ffast-math
+AVXFLAGS           = -mavx -march=native -ffast-math
 CXXFLAGS          += -Wall 
 INCLUDES	   = -I. -I./include
 LIBS               = #-pthread -fopenmp

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if at least one argument is provided
-if [ "$#" -lt 2 ]; then
+if [ "$#" -lt 3 ]; then
     echo "Usage: $0 (yes/no) <number of trials> <values to test>"
     exit 1
 fi
@@ -15,15 +15,6 @@ fi
 
 iter_num=$2
 
-echo "compiling all versions"
-make cleanall
-echo -e "\t\tCOMPILE PLAIN"
-make softmax_plain
-echo -e "\t\tCOMPILE AUTO"
-make softmax_auto
-echo -e "\t\tCOMPILE AVX"
-make softmax_avx
-echo "testing performances, with $iter_num repetitions"
 # Loop through the remaining arguments
 shift 2
 
