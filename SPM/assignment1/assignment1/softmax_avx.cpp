@@ -7,10 +7,6 @@
 #include <avx_mathfun.h>
 #include <immintrin.h>
 
-
-//reminder a float is 32bit/4bytes here
-//we assume 256 bits for now
-
 void softmax_avx(const float *input, float *output, size_t K) {
 
 
@@ -20,7 +16,7 @@ void softmax_avx(const float *input, float *output, size_t K) {
 	size_t i;
 
 	__m256 acc_max256=_mm256_loadu_ps(&input[0]);
-	//iterate on aligned data
+	//iterate on data using AVX registers
 	for(i=8;i<vect_K;i+=8){
 		__m256 curr256= _mm256_loadu_ps(&input[i]);
 		acc_max256 = _mm256_max_ps(acc_max256,curr256);
@@ -34,7 +30,8 @@ void softmax_avx(const float *input, float *output, size_t K) {
 		__m256 rest_max256=_mm256_set_ps(max,0,0,0,0,0,0,0);
 		acc_max256=_mm256_max_ps(acc_max256,rest_max256);
 	}
-	
+	//extract actual max for partial maximums
+
 	//start comparing first 4 with last 4 elements
 	//extract halfs
 	__m128 low128 = _mm256_extractf128_ps(acc_max256,0);
@@ -53,7 +50,7 @@ void softmax_avx(const float *input, float *output, size_t K) {
 	acc_max256 = _mm256_insertf128_ps(acc_max256, max128, 0);
 	acc_max256 = _mm256_insertf128_ps(acc_max256, max128, 1);
 	
-	//use the 256bit to substract and exponentiate with AVX
+	//use the AVX to substract and exponentiate 
 	//also accumulate exponential sums in the process
 	__m256 exp_sum256=_mm256_set1_ps(0.0f);
 	for(i=0;i<vect_K;i+=8){
@@ -68,27 +65,29 @@ void softmax_avx(const float *input, float *output, size_t K) {
 		exp_sum256 = _mm256_add_ps(exp_sum256,curr_output256);	
 		_mm256_storeu_ps(&output[i],curr_output256);
 	} 
-	//handle non multiples of 8
 	float max=_mm256_cvtss_f32(acc_max256);
 	float exp_sum_values[8];
-
+	
 	_mm256_storeu_ps(exp_sum_values,exp_sum256);
-	//load remaining values
+
+	//handle non multiples of 8 values
 	for(i=0;i<rest_K;++i){
 		output[vect_K+i]=std::exp(input[vect_K+i]-max);
 		exp_sum_values[i]+=output[vect_K+i];
 	}
+	//calculate final summation
 	float sum_div=0;
 	for(i=0;i<8;++i){
 		sum_div+=exp_sum_values[i];
 	}
 	exp_sum256=_mm256_set1_ps(sum_div);
-	//summation is done and values of exp are stored in output, divide by summation
+	//summation is done and values of exp are stored in output, divide by summation using AVX
 	for(i=0;i<vect_K;i+=8){
 		__m256 curr_output256=_mm256_loadu_ps(&output[i]);
 		curr_output256=_mm256_div_ps(curr_output256,exp_sum256);
 		_mm256_storeu_ps(&output[i],curr_output256);
 	}
+	//handle remainders 
 	if (is_not8mul){
 		float exp_sum=_mm256_cvtss_f32(exp_sum256);
 		for(i=0;i<rest_K;++i){

@@ -18,6 +18,11 @@ iter_num=$2
 # Loop through the remaining arguments
 shift 2
 
+make cleanall
+
+make softmax_auto
+make softmax_plain
+make softmax_avx
 
 for arg in "$@"; do
     echo -e "\tTESTING K=$arg"

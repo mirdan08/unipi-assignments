@@ -1,5 +1,11 @@
 #!/bin/bash
-# Run your commands and capture the outputs
+
+make cleanall
+
+make softmax_auto
+make softmax_plain
+make softmax_avx
+
 echo "testing plain"
 ./softmax_plain $1 $2
 echo "testing avx"
