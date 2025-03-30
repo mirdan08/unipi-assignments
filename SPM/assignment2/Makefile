@@ -1,26 +1,32 @@
 CXX                = g++ -std=c++17
-OPTFLAGS	   = -O3
+OPTFLAGS           = -O3
 CXXFLAGS          += -Wall 
-INCLUDES	   = -I. -I./include
+INCLUDES           = -I. -I./include
 
-LIBS               = #-pthread -fopenmp
-SOURCES            = $(wildcard *.cpp ./include/*.cpp)
-
-OBJECTS            = $(SOURCES:.cpp=.o)  # Convert .cpp to .o
-
-TARGET             = $(SOURCES:.cpp=)
+LIBS               = -pthread # -fopenmp
+COMMON_SOURCES     = $(wildcard ./include/*.cpp)  # Common source files
+COMMON_OBJECTS     = $(COMMON_SOURCES:.cpp=.o)    # Common object files
+MAIN_SOURCES       = $(wildcard *.cpp)           # Main source files with `main`
+MAIN_OBJECTS       = $(MAIN_SOURCES:.cpp=.o)     # Main object files
+TARGETS            = $(MAIN_SOURCES:.cpp=)       # Executables
 
 .PHONY: all clean cleanall 
-all: $(TARGET)
+all: $(TARGETS)
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $(OBJECTS) $(OPTFLAGS) -o $@ $(LIBS)
+# Rule to build each program
+$(TARGETS): %: %.o $(COMMON_OBJECTS)
+	$(CXX) $(OPTFLAGS) $^ -o $@ $(LIBS)
 
+# Rule to compile main source files
 %.o: %.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) $(OPTFLAGS) -c -o $@ $<
 
+# Rule to compile common source files
+include/%.o: include/%.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) $(OPTFLAGS) -c -o $@ $<
+
 clean: 
-	-rm -fr *.o *~ include/*.o
+	-rm -f *.o *~ include/*.o
 
 cleanall: clean
-	-rm -fr $(TARGET)
+	-rm -f $(TARGETS)

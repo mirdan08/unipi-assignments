@@ -11,3 +11,11 @@ ull collatz_steps(ull n){
     return steps;
 }
 
+
+ull partialMaxCollatzStep(int start,int end){
+    unsigned long long maxSteps=0;
+    for(int n=start;n<=end;n++){
+        maxSteps=std::max( maxSteps, collatz_steps(n));
+    }
+    return maxSteps;
+};
