@@ -19,7 +19,7 @@ std::pair<int,int> parseRange(const std::string& strRange){
 
 }
 
-/* 
+
 template <typename Func, typename... Args>
 auto make_task(Func&& func, Args&&... args) {
     using Rtrn = std::invoke_result_t<Func, Args...>;
@@ -31,5 +31,5 @@ auto make_task(Func&& func, Args&&... args) {
 
     // Wrap in packaged_task
     return std::packaged_task<Rtrn()>(std::move(bound));
-} */
+}
 

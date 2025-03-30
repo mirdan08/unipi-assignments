@@ -11,7 +11,6 @@ ull collatz_steps(ull n){
     return steps;
 }
 
-
 ull partialMaxCollatzStep(int start,int end){
     unsigned long long maxSteps=0;
     for(int n=start;n<=end;n++){

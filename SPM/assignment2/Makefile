@@ -1,4 +1,4 @@
-CXX                = g++ -std=c++17
+CXX                = g++ -std=c++20
 OPTFLAGS           = -O3
 CXXFLAGS          += -Wall 
 INCLUDES           = -I. -I./include
