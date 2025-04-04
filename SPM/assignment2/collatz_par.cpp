@@ -7,8 +7,11 @@
 #include<cmath>
 #include<future>
 #include<mutex>
+#include<ctime>
+#include<chrono>
 
 #include "utilities.hpp"
+#include "taskfactory.hpp"
 
 int main(int argc,char* argv[]){
     if(argc < 2){
@@ -48,6 +51,7 @@ int main(int argc,char* argv[]){
         i++;
     }
     
+    auto start= std::chrono::high_resolution_clock::now();
     //ranges parsing
     std::vector<std::pair<int,int>> ranges;
     
@@ -65,8 +69,8 @@ int main(int argc,char* argv[]){
             const auto& [start,end] = ranges[i];
             int rangeSize=end-start+1;
             int rangeBlocksNumber =  std::floor(rangeSize+taskSize-1)/taskSize;
-
-
+            
+            
             for(int t=threadIdx;t<rangeBlocksNumber;t+=threadsNumber){
                 int taskStart=start+t*taskSize;
                 int taskEnd = std::min(taskStart + taskSize - 1, end);
@@ -80,32 +84,34 @@ int main(int argc,char* argv[]){
     
     //dynamic scheduling shared variables
     std::mutex chunksMutex;
-    int bufferSize=std::max(threadsNumber+1,(int)ranges.size());
 
+    int bufferSize=std::max(threadsNumber+1,(int)ranges.size()+1);
+    
     //fixed size circular buffer
     int bufferReadIdx=0;
     int bufferWriteIdx=0;
-    std::vector <std::pair<int,int>> availableChunks(bufferSize,{-1,-1});
 
-    for(int i=0;i<std::min((int)ranges.size(),bufferSize);i++){
+    std::vector <std::pair<int,int>> availableChunks(bufferSize,{-1,-1});
+    
+    for(int i=0;i<(int)ranges.size();i++){
         //initializare with the starting chunk of each range
         availableChunks[i].first=i;
         availableChunks[i].second=0;
     }
-
-    bufferWriteIdx=std::min((int)ranges.size(),bufferSize);
+    
+    bufferWriteIdx=ranges.size();
     int remainingRanges= ranges.size();
     std::function<std::vector<unsigned long long>(int)> dynamicDistribution=[&](int threadIdx)->std::vector<unsigned long long>{   
-
+        
         std::vector<unsigned long long> partialMaxRange(rangesNumber,0);   
-
+        
         int currTaskIdx=-1;
         int currTaskChunk=-1;
-
+        
         unsigned long long chunkStart=-1;
         unsigned long long chunkEnd=-1;
         bool terminate=false;
-
+        
         while(true){
             {
                 std::lock_guard<std::mutex> lock_guard(chunksMutex);
@@ -114,22 +120,22 @@ int main(int argc,char* argv[]){
                     terminate=true;
                     break;
                 }
-
+                
                 //we are sure that there is work to do
                 const auto& [taskIdx,taskChunk]=availableChunks[bufferReadIdx];
-                bufferReadIdx=(bufferReadIdx+1)%availableChunks.size();
+                bufferReadIdx=(bufferReadIdx+1)%bufferSize;
                 if((taskChunk+1)*taskSize+1 < ranges[taskIdx].second){
                     // next chunk is available -> add it to queue
                     availableChunks[bufferWriteIdx].first=taskIdx;
                     availableChunks[bufferWriteIdx].second=taskChunk+1;
                     
-                    bufferWriteIdx=(bufferWriteIdx+1)%availableChunks.size();
+                    bufferWriteIdx=(bufferWriteIdx+1)%bufferSize;
                 }
                 else{
                     // next chunk is not available -> this range is terminated
                     remainingRanges--;
                 }
-
+                
                 //save the extracted task data
                 currTaskIdx=taskIdx;
                 currTaskChunk=taskChunk;
@@ -138,10 +144,10 @@ int main(int argc,char* argv[]){
             if (terminate == true){
                 break;
             }
-
+            
             //process the element
             
-            chunkStart= ranges[currTaskIdx].first+currTaskChunk*taskSize;
+            chunkStart= ranges[currTaskIdx].first+currTaskChunk*taskSize+1;
             chunkEnd=std::min(
                 ranges[currTaskIdx].first+(currTaskChunk+1)*taskSize,
                 ranges[currTaskIdx].second
@@ -152,36 +158,44 @@ int main(int argc,char* argv[]){
                 partialMaxCollatzStep(chunkStart,chunkEnd)
             );
         }
-
-
+        
+        
         return partialMaxRange;
         
     };
-
+    
     std::vector<std::thread> threads;
     std::vector<std::future<std::vector<unsigned long long>>> futures;
+    std::vector<std::packaged_task<std::vector<unsigned long long>(int)>> tasks;
 
+    tasks.reserve(threadsNumber);
     for(int t=0;t<threadsNumber;t++){
         std::function<std::vector<unsigned long long>(int)> schedulingStrategy = dynamicScheduling? dynamicDistribution:blockCyclicDistribution;
+        tasks.emplace_back(schedulingStrategy);
         std::packaged_task<std::vector<unsigned long long>(int)> task(schedulingStrategy);
         futures.emplace_back(task.get_future());
-        std::thread thread(std::move(task),t);
-        threads.emplace_back(std::move(thread));
+        threads.emplace_back(std::move(task),t);
     }
-    
+    for(auto& thread:threads) thread.join();
+
     for(auto& future:futures) {
         std::vector<unsigned long long> partialMax= future.get();
         for(int i=0;i<rangesNumber;i++){
             maxRange[i]=std::max(maxRange[i],partialMax[i]);
         }
     }
-    for(auto& thread:threads) thread.join();
-
+    
+    
+    
     for(int j=0;j< rangesNumber;j++){
         const auto& [start,end] = ranges[j];
         unsigned long long maxSteps= maxRange[j];
         std::cout << start << "-" << end << ": " << maxSteps << std::endl;
     }
-   
+
+    auto end= std::chrono::high_resolution_clock::now();
+
+    std::cout << "execution time(s): " << (std::chrono::duration<double> (end - start)).count() << std::endl;
+    
     return 0;
 }
