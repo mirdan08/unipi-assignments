@@ -1,5 +1,5 @@
 CXX                = g++ -std=c++20
-OPTFLAGS           = -O3
+OPTFLAGS           = -O3 -march=native
 CXXFLAGS          += -Wall 
 INCLUDES           = -I. -I./include
 
