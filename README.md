@@ -9,7 +9,8 @@ The assignments are 3:
 - An implementation of a Restricted Bolzmann Machine with the CD-1 algorithm to learn and reconstruct digits from the MNIST dataset.
 - An experiment done using three types of Autoencoders still on the MNIST dataset, this time i also used the gradient ascent algorithm to generate numbers starting from gaussian noise and test their dimension reduction capabilities.
 ### CL
-A series of exercises to try some of the concepts learned from the course.
+A series of exercises to try some of the concepts learned from the Continual Learning.
 ### SPM
 This folder contains the assignments done for the Parallel & distributed systems course:
 - implementation of the softmax function using AVX and autovectorization.
+- implemntation of static and dynamic shceduling strategy to find the maximum collatz steps for a set of rages of values.
