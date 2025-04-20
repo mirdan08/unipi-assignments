@@ -85,62 +85,83 @@ int main(int argc, char *argv[]) {
 				return false;
 			}
 			std::string fname=std::string(argv[start])+ ".zip";
-			std::ofstream outFile(fname,std::ios::binary);
 			size_t chunksNumber=std::ceil(filesize/blockSize);
-			//prepare dynamic length header based on file size and block size
-			std::vector<size_t> chunksLengths(chunksNumber);
-			std::vector<unsigned char*> chunkData(chunksNumber);
-			chunksLengths.push_back(-1);
 
-			//off set for the actual data
-			size_t dataOffset=chunksLengths.size();
-            for(int i=0;i<chunksNumber;i++){
-				unsigned char* ptrStart=(unsigned char*)(ptr+i);
+			if(COMP){
+				std::ofstream outFile(fname,std::ios::binary);
+				//prepare dynamic length header based on file size and block size
+				std::vector<size_t> chunksLengths(chunksNumber);
+				std::vector<unsigned char*> chunksData(chunksNumber);
 				
-                size_t chunksSize = i*blockSize+ blockSize < filesize ? blockSize : filesize - i*blockSize ;
-				
-				size_t compChunkLen=-1;
-				unsigned char* compressedChunk=nullptr;
-				
-				success&=compressChunkData(
-					ptrStart,chunksSize,
-					compChunkLen,&compressedChunk
-				);
-				
-				chunksLengths[i]=compChunkLen;
-				chunkData[i]=compressedChunk;
-            }
-			int accumIndex=0;
-			for(int i=0;i<chunksNumber;i++){
-				//write chun length
-				outFile.write(reinterpret_cast<const char*>(&chunksLengths[i]), sizeof(chunksLengths[i]));	
-				//write chunk index
-				outFile.write(reinterpret_cast<const char*>(&dataOffset+accumIndex), sizeof(dataOffset+accumIndex));
-				//write actual copressed data
-				outFile.seekp(dataOffset+accumIndex);
-				outFile.write(reinterpret_cast<const char*>(&chunkData[i]), sizeof(chunkData[i]));
-				accumIndex+=chunksLengths[i];
-
-
-			}
-			// at this point the files are ready and we can serialize the header
-			outFile.write(reinterpret_cast<const char*>(&chunksLengths), sizeof(chunksLengths));	
-			//serialize the file sizes
-			for(int blockIdx=0;blockIdx<filesize;blockIdx+=blockSize){
-				
+				//off set for the actual data
+				size_t dataOffset=chunksLengths.size();
+				for(int i=0;i<chunksNumber;i++){
+					unsigned char* ptrStart=(unsigned char*)(ptr+i);
+					
+					size_t chunksSize = i*blockSize+ blockSize < filesize ? blockSize : filesize - i*blockSize ;
+					
+					size_t compChunkLen=-1;
+					unsigned char* compressedChunk=nullptr;
+					
+					success&=compressChunkData(
+						ptrStart,chunksSize,
+						compChunkLen,&compressedChunk
+					);
+					
+					chunksLengths[i]=compChunkLen;
+					chunksData[i]=compressedChunk;
+            	}
+				//write number of chunks
+				outFile.write(reinterpret_cast<const char*>(&chunksNumber),sizeof(size_t));
+				//write chunks lengths
+				outFile.write(reinterpret_cast<const char*>(&chunksLengths), sizeof(chunksLengths));
+				// write actual chunkData
+				for(const auto& c:chunksData){
+					outFile.write(reinterpret_cast<const char*>(&c), sizeof(c));
+				}
+				outFile.close();
 				
 			}
+			else{
+				
+				unsigned char* ptrStart=(unsigned char*)(ptr);
+				size_t chunksNum;
+				size_t offset=0;
+				
+				std::memcpy(&chunksNum,ptr,sizeof(size_t));
+				offset+=sizeof(size_t);
+				std::vector<size_t> chunksLenghts(chunksNum);
+				std::vector<size_t> decompChunksLenghts(chunksNum);
+				std::vector<size_t> chunksIdx(chunksNum);
+				std::vector<unsigned char*> chunksData(chunksNumber);
+				
+				std::memcpy(chunksLenghts.data(),ptr+offset,sizeof(size_t)*chunksNum);
+				int accumIdx=0;
+				for(int i=0;i<chunksNum;i++){
+					chunksIdx[i]=accumIdx;
+					accumIdx+=chunksLenghts[i];
+				}
+				
+				offset+=sizeof(size_t)*chunksNum;
+				
+				
+				
+				for(int i=0;i<chunksNum;i++){
+					unsigned char* decompChunkData;
+					size_t decompChunkLen;
+					success&=decompressChunkData(
+						&ptr[offset+chunksIdx[i]],chunksLenghts[i],
+						
+						&chunksData[i],decompChunksLenghts[i]
+					);
+				}
+				std::ofstream outFile(argv[start],std::ios::binary);
 
-
-
-
-
-
-
-
-			
-
-
+				for(int i=0;i< chunksNum;i++){
+					outFile.write(reinterpret_cast<const char*>(chunksData[i]),decompChunksLenghts[i]);
+				}
+				outFile.close();
+			}
 			unmapFile(ptr, filesize);
             
 
