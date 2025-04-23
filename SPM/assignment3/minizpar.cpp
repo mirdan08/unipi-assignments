@@ -4,6 +4,9 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <cstdio>
+#include <filesystem>
+#include <chrono>
 
 /*
 In this implementation we need a header for the compression part as
@@ -55,6 +58,16 @@ static inline bool decompressChunkData(
 	return true;
 }
 
+std::string removeSuffix(const std::string &str, const std::string &suffix)
+{
+	if (str.size() >= suffix.size() &&
+		str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0)
+	{
+		return str.substr(0, str.size() - suffix.size());
+	}
+	return str;
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc < 2)
@@ -63,66 +76,95 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	long start = parseCommandLine(argc, argv);
-
-	
-	size_t blockSize = 1000;
+	size_t blockSize = BLOCK_SIZE;
 	bool success = true;
-	for (int fIdx = start; fIdx < argc; fIdx++)
+	std::vector<std::string> paths;
+	int fIdx=start;
+	while(argv[start]) 
 	{
-		size_t filesize = 0;
-		if (isDirectory(argv[fIdx], filesize))
+		if (std::filesystem::exists(argv[fIdx]))
 		{
-				success &= walkDir(argv[fIdx], COMP);
+			if (std::filesystem::is_directory(argv[fIdx]))
+			{
+				if(RECUR){
+					for (const auto &entry : std::filesystem::recursive_directory_iterator(argv[fIdx]))
+					{
+						if(entry.is_regular_file()){
+							paths.push_back(entry.path());
+						}
+					}
+				}else{
+					for (const auto &entry : std::filesystem::directory_iterator(argv[fIdx]))
+					{
+						if(entry.is_regular_file()){
+							paths.push_back(entry.path());
+						}
+					}
+				}
+			}
+			else if (std::filesystem::is_regular_file(argv[fIdx]))
+			{
+				paths.push_back(std::string(argv[fIdx]));
+			}
 		}
 		else
 		{
-			// load file by mapping it to the memory
-			unsigned char *ptr = nullptr;
-			if (!mapFile(argv[fIdx], filesize, ptr))
-			{
-				if (QUITE_MODE >= 1)
-				std::fprintf(stderr, "mapFile %s failed\n", argv[fIdx]);
-				success=false;
-				break;
-			}
+			std::cout << "Path does not exist: " << argv[fIdx] << std::endl;
+		}
+		start++;
+	}
+	auto startTime= std::chrono::high_resolution_clock::now();
+	for (int pIdx = 0; pIdx < paths.size(); pIdx++)
+	{
+		size_t filesize = 0;
+		
+		// load file by mapping it to the memory
+		unsigned char *ptr = nullptr;
+		if (!mapFile(paths[pIdx].c_str(), filesize, ptr))
+		{
+			if (QUITE_MODE >= 1)
+			std::fprintf(stderr, "mapFile %s failed\n", paths[pIdx]);
+			success = false;
+			break;
+		}
+		
+		if (COMP)
+		{
+			size_t chunksNumber = (filesize + blockSize - 1) / blockSize;
+
+			std::vector<size_t> chunksLenghts(chunksNumber);
+			std::vector<unsigned char *> chunksData(chunksNumber);
+			#pragma omp parallel shared(blockSize) \
+			shared(argv)                       \
+			shared(pIdx)                       \
+			shared(success)                    \
+			shared(ptr)                        \
+			shared(chunksLenghts)              \
+			shared(chunksData)
 			
-			if (COMP)
 			{
-				size_t chunksNumber = (filesize + blockSize - 1) / blockSize;
-				
-				std::vector<size_t> chunksLenghts(chunksNumber);
-				std::vector<unsigned char *> chunksData(chunksNumber);
-				#pragma omp parallel shared(blockSize) \
-					shared(argv)                       \
-					shared(fIdx)                       \
-					shared(success)					   \
-					shared(ptr) \
-					shared(chunksLenghts) \
-					shared(chunksData) \
-
+				#pragma omp for reduction(&& : success) schedule(runtime)
+				for (int i = 0; i < chunksNumber; i++)
 				{
-					#pragma omp for reduction(&& : success) 
-					for (int i = 0; i < chunksNumber; i++)
-					{
-						unsigned char *ptrStart = ptr + i * blockSize;
-
-						size_t blockOffset = i * blockSize;
-						size_t chunksSize = std::min(blockSize, filesize - blockOffset);
-
-						size_t compChunkLen = -1;
-						unsigned char *compressedChunk = nullptr;
-
-						success &= compressChunkData(
-							ptrStart, chunksSize,
-							compChunkLen, &compressedChunk);
-
+					unsigned char *ptrStart = ptr + i * blockSize;
+					
+					size_t blockOffset = i * blockSize;
+					size_t chunksSize = std::min(blockSize, filesize - blockOffset);
+					
+					size_t compChunkLen = -1;
+					unsigned char *compressedChunk = nullptr;
+					
+					success &= compressChunkData(
+						ptrStart, chunksSize,
+						compChunkLen, &compressedChunk);
+						
 						chunksLenghts[i] = compChunkLen;
 						chunksData[i] = compressedChunk;
 					}
-
-					#pragma omp single 
+					
+					#pragma omp single
 					{
-						std::string fname = std::string(argv[fIdx]) + ".pzip";
+						std::string fname = std::string(paths[pIdx]) + ".pzip";
 						std::ofstream outFile(fname, std::ios::binary);
 						// write number of chunks
 						outFile.write(reinterpret_cast<const char *>(&chunksNumber), sizeof(size_t));
@@ -131,71 +173,78 @@ int main(int argc, char *argv[])
 						{
 							outFile.write(reinterpret_cast<const char *>(&chunksLenghts[i]), sizeof(size_t));
 						}
-						// write actual chunkData
-						for (size_t i = 0; i < chunksNumber; i++)
+					// write actual chunkData
+					for (size_t i = 0; i < chunksNumber; i++)
+					{
+						outFile.write(reinterpret_cast<const char *>(chunksData[i]), sizeof(unsigned char) * chunksLenghts[i]);
+						delete[] chunksData[i];
+					}
+					outFile.close();
+				}
+			}
+		}
+		else
+		{
+
+			size_t chunksNumber;
+			std::memcpy(&chunksNumber, ptr, sizeof(size_t));
+			size_t offset = sizeof(size_t);
+			std::vector<size_t> decompChunksLenghts(chunksNumber);
+			std::vector<size_t> chunksIdx(chunksNumber);
+			std::vector<size_t> chunksLenghts(chunksNumber);
+			std::vector<unsigned char *> chunksData(chunksNumber);
+			
+			for (int i = 0; i < chunksNumber; i++)
+			{
+				std::memcpy(&chunksLenghts[i], ptr + offset, sizeof(size_t));
+				offset += sizeof(size_t);
+			}
+			
+			int accumIdx = 0;
+			
+			for (int i = 0; i < chunksNumber; i++)
+			{
+				chunksIdx[i] = offset + accumIdx;
+				accumIdx += chunksLenghts[i];
+			}
+			#pragma omp parallel shared(ptr, chunksIdx, chunksLenghts, chunksData, decompChunksLenghts, chunksNumber)
+			{
+				#pragma omp for reduction(&& : success) schedule(runtime)
+				for (int i = 0; i < chunksNumber; i++)
+				{
+					success &= decompressChunkData(
+						&ptr[chunksIdx[i]], chunksLenghts[i],
+						&chunksData[i], decompChunksLenghts[i]);
+				}
+					
+					#pragma omp single
+					{
+						
+						std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
+						for (int i = 0; i < chunksNumber; i++)
 						{
-							outFile.write(reinterpret_cast<const char *>(chunksData[i]), sizeof(unsigned char) * chunksLenghts[i]);
+							outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
+							delete[] chunksData[i];
 						}
 						outFile.close();
 					}
 				}
-				}
-				else
-				{
-
-					size_t chunksNumber;
-					std::memcpy(&chunksNumber, ptr, sizeof(size_t));
-					size_t offset = sizeof(size_t);
-					std::vector<size_t> decompChunksLenghts(chunksNumber);
-					std::vector<size_t> chunksIdx(chunksNumber);
-					std::vector<size_t> chunksLenghts(chunksNumber);
-					std::vector<unsigned char *> chunksData(chunksNumber);
-
-					for (int i = 0; i < chunksNumber; i++)
-					{
-						std::memcpy(&chunksLenghts[i], ptr + offset, sizeof(size_t));
-						offset += sizeof(size_t);
-					}
-
-					int accumIdx = 0;
-
-					for (int i = 0; i < chunksNumber; i++)
-					{
-						chunksIdx[i] = offset + accumIdx;
-						accumIdx += chunksLenghts[i];
-					}
-					#pragma omp parallel shared(ptr,chunksIdx,chunksLenghts,chunksData,decompChunksLenghts,chunksNumber) 
-					{
-						#pragma omp for reduction(&& : success) 
-						for (int i = 0; i < chunksNumber; i++)
-						{
-							success &= decompressChunkData(
-								&ptr[chunksIdx[i]], chunksLenghts[i],
-								&chunksData[i], decompChunksLenghts[i]);
-						}
-						
-						#pragma omp single 
-						{
-
-							std::ofstream outFile(argv[fIdx], std::ios::binary);
-							for (int i = 0; i < chunksNumber; i++)
-							{
-								outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
-							}
-							outFile.close();
-						}
-					}
-
-				}
-
-				unmapFile(ptr, filesize);
 			}
-	}
-	if (!success)
-	{
-		printf("Exiting with (some) Error(s)\n");
-		return -1;
-	}
+			
+			unmapFile(ptr, filesize);
+			
+			if (REMOVE_ORIGIN)
+			{
+				unlink(paths[pIdx].c_str());
+			}
+		}
+		if (!success)
+		{
+			printf("Exiting with (some) Error(s)\n");
+			return -1;
+		}
+	auto endTime= std::chrono::high_resolution_clock::now();
 	printf("Exiting with Success\n");
+	std::cout << "execution time(s): " << (std::chrono::duration<double> (endTime - startTime)).count() << std::endl;
 	return 0;
 }

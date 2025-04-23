@@ -21,12 +21,23 @@ static inline void usage(const char *argv0) {
 
 int parseCommandLine(int argc, char *argv[]) {
     extern char *optarg;
-    const std::string optstr = "r:C:D:q:";
+    const std::string optstr = "r:C:D:B:q";
     long opt, start = 1;
     bool cpresent = false, dpresent = false;
 
     while ((opt = getopt(argc, argv, optstr.c_str())) != -1) {
         switch (opt) {
+            case 'B': {
+                long blockSize = 1000;
+                if(!isNumber(optarg,blockSize)){
+                    std::fprintf(stderr, "Error: wrong '-B' option\n");
+                    usage(argv[0]);
+                    return -1;
+                }
+                BLOCK_SIZE = blockSize;
+
+                start+=2;
+            } break;
             case 'r': {
                 long n = 0;
                 if (!isNumber(optarg, n)) {
