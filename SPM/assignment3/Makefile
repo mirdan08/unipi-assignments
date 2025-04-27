@@ -2,7 +2,7 @@ CXX		= g++ -std=c++20
 INCLUDES	= -I . -I miniz
 CXXFLAGS  	+= -Wall 
 
-LDFLAGS 	= -pthread -fopenmp
+LDFLAGS 	= -pthread -fopenmp -Wall -Wextra
 OPTFLAGS	= -O3 -ffast-math -DNDEBUG
 
 TARGETS		= minizseq

@@ -22,8 +22,8 @@ for ((i = 1; i <= reps; i++)); do
                 export OMP_NUM_THREADS=$n_threads
                 export OMP_SCHEDULE="$schedule_type,$n_threads"
 
-                par_perf_comp=$(./minizpar -C 1 -B "$block_size" "$dir_path" | grep -oP 'execution time\(s\):\s*\K[0-9.]+')
-                par_perf_decomp=$(./minizpar -D 1 "$dir_path" | grep -oP 'execution time\(s\):\s*\K[0-9.]+')
+                par_perf_comp=$(./minizpar_omptask -C 1 -B "$block_size" "$dir_path" | grep -oP 'execution time\(s\):\s*\K[0-9.]+')
+                par_perf_decomp=$(./minizpar_omptask -D 1 "$dir_path" | grep -oP 'execution time\(s\):\s*\K[0-9.]+')
 
                 echo "$schedule_type,$n_threads,$block_size,$i,$par_perf_comp,$par_perf_decomp"
             done
