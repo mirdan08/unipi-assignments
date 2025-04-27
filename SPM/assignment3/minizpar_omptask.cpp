@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
 							
 							#pragma omp task shared(chunksData, decompChunksLenghts)
 							{
-								std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip")+".pdec", std::ios::binary);
+								std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
 								for (int i = 0; i < chunksNumber; i++)
 								{
 									// std::cout << "dc>" << decompChunksLenghts[i] << std::endl;
