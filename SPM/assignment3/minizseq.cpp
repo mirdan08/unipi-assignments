@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
         usage(argv[0]);
         return -1;
     }
-    // parse command line arguments and set some global variables
     long start=parseCommandLine(argc, argv);
     if (start<0) return -1;
 	

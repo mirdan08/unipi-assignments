@@ -8,47 +8,35 @@
 #include <filesystem>
 #include <chrono>
 
-/*
-In this implementation we need a header for the compression part as
-we have to memorize at least the singly compressed blocks
-*/
-
+//compress a single chunk data
 static inline bool compressChunkData(
 	unsigned char *startPtr,
 	size_t size,
-	// output params
 	size_t &chunk_len,
 	unsigned char **chunkPtr)
 {
 
 	unsigned char *inPtr = startPtr;
 	size_t inSize = size;
-	// get an estimation of the maximum compression size
 	size_t cmp_len = compressBound(inSize);
-	// allocate memory to store compressed data in memory
 	unsigned char *ptrOut = new unsigned char[cmp_len];
 	if (compress(ptrOut, &cmp_len, (const unsigned char *)inPtr, inSize) != Z_OK)
 	{
 		return false;
 	}
-	// save output params
 	chunk_len = cmp_len;
 	*chunkPtr = ptrOut;
 	return true;
 }
-
+//decompress a single chunk of data
 static inline bool decompressChunkData(
 	unsigned char *chunkStartPtr,
 	size_t chunk_size,
-	// output params
 	unsigned char **decompChunkPtr,
 	size_t &decompChunkLen)
 {
-	size_t decompressedSize = chunk_size; // read the original size
-
-	// Write the decompressed data to a file
+	size_t decompressedSize = chunk_size;
 	unsigned char *decompressed_data = new unsigned char[chunk_size];
-	// decompress the data
 	if (uncompress(decompressed_data, &decompressedSize, chunkStartPtr, chunk_size) != Z_OK)
 	{
 		return false;
@@ -57,7 +45,7 @@ static inline bool decompressChunkData(
 	*decompChunkPtr = decompressed_data;
 	return true;
 }
-
+//remove the suffix from the file name
 std::string removeSuffix(const std::string &str, const std::string &suffix)
 {
 	if (str.size() >= suffix.size() &&
@@ -80,6 +68,7 @@ int main(int argc, char *argv[])
 	bool success = true;
 	std::vector<std::string> paths;
 	int fIdx=start;
+	//read files paths on case of folders
 	while(argv[start]) 
 	{
 		if (std::filesystem::exists(argv[fIdx]))
@@ -113,6 +102,7 @@ int main(int argc, char *argv[])
 		}
 		start++;
 	}
+	//main loop iteration
 	auto startTime= std::chrono::high_resolution_clock::now();
 	for (int pIdx = 0; pIdx < paths.size(); pIdx++)
 	{
@@ -127,13 +117,13 @@ int main(int argc, char *argv[])
 			success = false;
 			break;
 		}
-		
 		if (COMP)
 		{
 			size_t chunksNumber = (filesize + blockSize - 1) / blockSize;
 
 			std::vector<size_t> chunksLenghts(chunksNumber);
 			std::vector<unsigned char *> chunksData(chunksNumber);
+			//parallelize on blocks of each file
 			#pragma omp parallel shared(blockSize) \
 			shared(argv)                       \
 			shared(pIdx)                       \
@@ -160,20 +150,17 @@ int main(int argc, char *argv[])
 						
 						chunksLenghts[i] = compChunkLen;
 						chunksData[i] = compressedChunk;
-					}
-					
-					#pragma omp single
+				}
+					//write back the the blocks plus the header
+				#pragma omp single
+				{
+					std::string fname = std::string(paths[pIdx]) + ".pzip";
+					std::ofstream outFile(fname, std::ios::binary);
+					outFile.write(reinterpret_cast<const char *>(&chunksNumber), sizeof(size_t));
+					for (size_t i = 0; i < chunksNumber; i++)
 					{
-						std::string fname = std::string(paths[pIdx]) + ".pzip";
-						std::ofstream outFile(fname, std::ios::binary);
-						// write number of chunks
-						outFile.write(reinterpret_cast<const char *>(&chunksNumber), sizeof(size_t));
-						// write chunks lengths
-						for (size_t i = 0; i < chunksNumber; i++)
-						{
-							outFile.write(reinterpret_cast<const char *>(&chunksLenghts[i]), sizeof(size_t));
-						}
-					// write actual chunkData
+						outFile.write(reinterpret_cast<const char *>(&chunksLenghts[i]), sizeof(size_t));
+					}
 					for (size_t i = 0; i < chunksNumber; i++)
 					{
 						outFile.write(reinterpret_cast<const char *>(chunksData[i]), sizeof(unsigned char) * chunksLenghts[i]);
@@ -183,9 +170,9 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		else
+		else//decompression part
 		{
-
+			//read back the the header and prepare necessary data for deocompression
 			size_t chunksNumber;
 			std::memcpy(&chunksNumber, ptr, sizeof(size_t));
 			size_t offset = sizeof(size_t);
@@ -193,7 +180,7 @@ int main(int argc, char *argv[])
 			std::vector<size_t> chunksIdx(chunksNumber);
 			std::vector<size_t> chunksLenghts(chunksNumber);
 			std::vector<unsigned char *> chunksData(chunksNumber);
-			
+			//offset is used to allow parallelism
 			for (int i = 0; i < chunksNumber; i++)
 			{
 				std::memcpy(&chunksLenghts[i], ptr + offset, sizeof(size_t));
@@ -201,12 +188,12 @@ int main(int argc, char *argv[])
 			}
 			
 			int accumIdx = 0;
-			
 			for (int i = 0; i < chunksNumber; i++)
 			{
 				chunksIdx[i] = offset + accumIdx;
 				accumIdx += chunksLenghts[i];
 			}
+			//main parallelism on the file chunks
 			#pragma omp parallel shared(ptr, chunksIdx, chunksLenghts, chunksData, decompChunksLenghts, chunksNumber)
 			{
 				#pragma omp for reduction(&& : success) schedule(runtime)
@@ -217,32 +204,32 @@ int main(int argc, char *argv[])
 						&chunksData[i], decompChunksLenghts[i]);
 				}
 					
-					#pragma omp single
+				#pragma omp single
+				{
+					//write back the result
+					std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
+					for (int i = 0; i < chunksNumber; i++)
 					{
-						
-						std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
-						for (int i = 0; i < chunksNumber; i++)
-						{
-							outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
-							delete[] chunksData[i];
-						}
-						outFile.close();
+						outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
+						delete[] chunksData[i];
 					}
+					outFile.close();
 				}
 			}
-			
-			unmapFile(ptr, filesize);
-			
-			if (REMOVE_ORIGIN)
-			{
-				unlink(paths[pIdx].c_str());
-			}
 		}
-		if (!success)
+		//unmap file ad remove it if it is specified
+		unmapFile(ptr, filesize);
+		
+		if (REMOVE_ORIGIN)
 		{
-			printf("Exiting with (some) Error(s)\n");
-			return -1;
+			unlink(paths[pIdx].c_str());
 		}
+	}
+	if (!success)
+	{
+		printf("Exiting with (some) Error(s)\n");
+		return -1;
+	}
 	auto endTime= std::chrono::high_resolution_clock::now();
 	printf("Exiting with Success\n");
 	std::cout << "execution time(s): " << (std::chrono::duration<double> (endTime - startTime)).count() << std::endl;

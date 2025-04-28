@@ -8,11 +8,8 @@
 #include <filesystem>
 #include <chrono>
 #include <omp.h>
-/*
-In this implementation we need a header for the compression part as
-we have to memorize at least the singly compressed blocks
-*/
 
+//compress a single chunk
 static inline bool compressChunkData(
 	unsigned char *startPtr,
 	size_t size,
@@ -23,20 +20,18 @@ static inline bool compressChunkData(
 
 	unsigned char *inPtr = startPtr;
 	size_t inSize = size;
-	// get an estimation of the maximum compression size
 	size_t cmp_len = compressBound(inSize);
-	// allocate memory to store compressed data in memory
 	unsigned char *ptrOut = new unsigned char[cmp_len];
 	if (compress(ptrOut, &cmp_len, (const unsigned char *)inPtr, inSize) != Z_OK)
 	{
 		return false;
 	}
-	// save output params
 	chunk_len = cmp_len;
 	*chunkPtr = ptrOut;
 	return true;
 }
 
+//decompress a single chunk
 static inline bool decompressChunkData(
 	unsigned char *chunkStartPtr,
 	size_t chunk_size,
@@ -45,22 +40,17 @@ static inline bool decompressChunkData(
 	size_t &decompChunkLen)
 {
 
-	size_t decompressedSize = chunk_size; // read the original size
-
-	// Write the decompressed data to a file
+	size_t decompressedSize = chunk_size;
 	unsigned char *decompressed_data = new unsigned char[chunk_size];
-	// decompress the data
 	if (uncompress(decompressed_data, &decompressedSize, chunkStartPtr, chunk_size) != Z_OK)
 	{
 		return false;
 	}
-
 	decompChunkLen = decompressedSize;
-
 	*decompChunkPtr = decompressed_data;
 	return true;
 }
-
+//remove suffix from the file name
 std::string removeSuffix(const std::string &str, const std::string &suffix)
 {
 	if (str.size() >= suffix.size() &&
@@ -84,6 +74,8 @@ int main(int argc, char *argv[])
 	bool success = true;
 	std::vector<std::string> paths;
 	int fIdx = start;
+
+	//read files paths on case of folders
 	while (argv[start])
 	{
 		if (std::filesystem::exists(argv[fIdx]))
@@ -123,17 +115,20 @@ int main(int argc, char *argv[])
 		start++;
 	}
 	auto startTime = std::chrono::high_resolution_clock::now();
-	
+	//begin instantiating taks
 	#pragma omp parallel
 	{
 		#pragma omp single
 		{
 			for (int pIdx = 0; pIdx < paths.size(); pIdx++)
-			{
+			{	
+				//instantiate a taskgroup
 				#pragma omp taskgroup
 				{
+
 					size_t filesize = 0;
 					unsigned char *ptr = nullptr;
+					//map file to memory
 					#pragma omp task shared(ptr,filesize)
 					{
 						if (!mapFile(paths[pIdx].c_str(), filesize, ptr))
@@ -145,141 +140,132 @@ int main(int argc, char *argv[])
 					}
 
 					#pragma omp taskwait
-
+					//instanti
 					if (COMP)
 					{
 						size_t chunksNumber = (filesize + blockSize - 1) / blockSize;
 						
 						std::vector<size_t> chunksLenghts(chunksNumber);
 						std::vector<unsigned char *> chunksData(chunksNumber);
+						//main source of parallelism for compression on a single file
 						#pragma omp taskloop shared(chunksLenghts,chunksData,ptr)
 						for (int i = 0; i < chunksNumber; i++)
 						{
-								//std::cout<<  "th: " <<omp_get_thread_num() << " executed chunk" << i << "of" << paths[pIdx] << std::endl;
-								unsigned char *ptrStart = ptr + i * blockSize;
-								
-								size_t blockOffset = i * blockSize;
-								size_t chunksSize = std::min(blockSize, filesize - blockOffset);
-								
-								size_t compChunkLen = -1;
-								unsigned char *compressedChunk = nullptr;
-								#pragma omp atomic
-								success &= compressChunkData(
-									ptrStart, chunksSize,
-									compChunkLen, &compressedChunk);
-									
-									chunksLenghts[i] = compChunkLen;
-									chunksData[i] = compressedChunk;
+							unsigned char *ptrStart = ptr + i * blockSize;
+							
+							size_t blockOffset = i * blockSize;
+							size_t chunksSize = std::min(blockSize, filesize - blockOffset);
+							
+							size_t compChunkLen = -1;
+							unsigned char *compressedChunk = nullptr;
+							#pragma omp atomic
+							success &= compressChunkData(
+								ptrStart, chunksSize,
+								compChunkLen, &compressedChunk);
+							chunksLenghts[i] = compChunkLen;
+							chunksData[i] = compressedChunk;
 								
 						}
-							
-							#pragma omp taskwait
-							
-							#pragma omp task shared(chunksLenghts,chunksData,chunksNumber)
-							{
-								//std::cout<<  "th: " <<omp_get_thread_num() << " is  writing for " << std::string(paths[pIdx]) << std::endl;
-
-								std::string fname = std::string(paths[pIdx]) + ".pzip";
-								std::ofstream outFile(fname, std::ios::binary);
-								// write number of chunks
-								outFile.write(reinterpret_cast<const char *>(&chunksNumber), sizeof(size_t));
-								std::cout << "chunks:" <<chunksNumber << std::endl;
-								// write chunks lengths
-								for (size_t i = 0; i < chunksNumber; i++)
-								{
-									outFile.write(reinterpret_cast<const char *>(&chunksLenghts[i]), sizeof(size_t));
-								}
-								// write actual chunkData
-								for (size_t i = 0; i < chunksNumber; i++)
-								{
-									//std::cout << chunksData[i]<< std::endl;
-									outFile.write(reinterpret_cast<const char *>(chunksData[i]), sizeof(unsigned char) * chunksLenghts[i]);
-									//delete[] chunksData[i];
-								}
-								outFile.close();
-							}
-
-							#pragma omp taskwait
-						}
-						else
+						
+						#pragma omp taskwait
+						//write the result on the disk with its header
+						#pragma omp task shared(chunksLenghts,chunksData,chunksNumber)
 						{
-							
-							size_t chunksNumber;
-							std::memcpy(&chunksNumber, ptr, sizeof(size_t));
-							
-							size_t offset = sizeof(size_t);
-							std::vector<size_t> decompChunksLenghts(chunksNumber);
-							std::vector<size_t> chunksIdx(chunksNumber);
-							std::vector<size_t> chunksLenghts(chunksNumber);
-							std::vector<unsigned char *> chunksData(chunksNumber);
-							
-							#pragma omp task shared(chunksIdx, chunksLenghts, chunksData, offset, ptr)
+							std::string fname = std::string(paths[pIdx]) + ".pzip";
+							std::ofstream outFile(fname, std::ios::binary);
+							// write number of chunks
+							outFile.write(reinterpret_cast<const char *>(&chunksNumber), sizeof(size_t));
+							// write chunks lengths
+							outFile.write(reinterpret_cast<const char *>(chunksLenghts.data()), chunksNumber*sizeof(size_t));
+							// write actual chunkData
+							for (size_t i = 0; i < chunksNumber; i++)
 							{
-								// std::cout<<  "th: " <<omp_get_thread_num() << " is reading the header for " << paths[pIdx] << std::endl;
-								
-								for (int i = 0; i < chunksNumber; i++)
-								{
-									std::memcpy(&chunksLenghts[i], ptr + offset, sizeof(size_t));
-									offset += sizeof(size_t);
-								}
-								
-								int accumIdx = 0;
-								
-								for (int i = 0; i < chunksNumber; i++)
-								{
-									chunksIdx[i] = offset + accumIdx;
-									accumIdx += chunksLenghts[i];
-								}
+								//std::cout << chunksData[i]<< std::endl;
+								outFile.write(reinterpret_cast<const char *>(chunksData[i]), sizeof(unsigned char) * chunksLenghts[i]);
+								delete[] chunksData[i];
 							}
-							
-							#pragma omp taskwait
-							
-							#pragma omp taskloop shared(decompChunksLenghts, ptr, chunksData, success)
-							for (int i = 0; i < chunksNumber; i++)
-							{
-								size_t expectedSize = 0; // original uncompressed size
-								unsigned char *outChunk = nullptr;
-								// std::cout<<  "th: " <<omp_get_thread_num() << " is decompressing chunk " << i << " for " << paths[pIdx] << std::endl;
-								#pragma omp atomic
-								success &= decompressChunkData(
-									&ptr[chunksIdx[i]], chunksLenghts[i],
-									&outChunk, expectedSize);
-									chunksData[i] = outChunk;
-									decompChunksLenghts[i] = expectedSize;
-							}
-									
-							#pragma omp taskwait
-							
-							#pragma omp task shared(chunksData, decompChunksLenghts)
-							{
-								std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
-								for (int i = 0; i < chunksNumber; i++)
-								{
-									// std::cout << "dc>" << decompChunksLenghts[i] << std::endl;
-									outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
-									//delete[] chunksData[i];
-								}
-								outFile.close();
-							}
-							#pragma omp taskwait
+							outFile.close();
 						}
 
 						#pragma omp taskwait
-						
-						#pragma omp task shared(ptr, filesize, paths, pIdx)
-						{
-							unmapFile(ptr, filesize);
+					}
+					else
+					{
 							
-							if (REMOVE_ORIGIN)
+						size_t chunksNumber;
+						std::memcpy(&chunksNumber, ptr, sizeof(size_t));
+						
+						size_t offset = sizeof(size_t);
+						std::vector<size_t> decompChunksLenghts(chunksNumber);
+						std::vector<size_t> chunksIdx(chunksNumber);
+						std::vector<size_t> chunksLenghts(chunksNumber);
+						std::vector<unsigned char *> chunksData(chunksNumber);
+						//extract and elaborate the header
+						#pragma omp task shared(chunksIdx, chunksLenghts, chunksData, offset, ptr)
+						{
+							// std::cout<<  "th: " <<omp_get_thread_num() << " is reading the header for " << paths[pIdx] << std::endl;
+							
+							for (int i = 0; i < chunksNumber; i++)
 							{
-								unlink(paths[pIdx].c_str());
+								std::memcpy(&chunksLenghts[i], ptr + offset, sizeof(size_t));
+								offset += sizeof(size_t);
 							}
+							
+							int accumIdx = 0;
+							
+							for (int i = 0; i < chunksNumber; i++)
+							{
+								chunksIdx[i] = offset + accumIdx;
+								accumIdx += chunksLenghts[i];
+							}
+						}
+						
+						#pragma omp taskwait
+						//main source of parallelism for decompression on a single file
+						#pragma omp taskloop shared(decompChunksLenghts, ptr, chunksData, success)
+						for (int i = 0; i < chunksNumber; i++)
+						{
+							size_t expectedSize = 0; 
+							unsigned char *outChunk = nullptr;
+							#pragma omp atomic
+							success &= decompressChunkData(
+								&ptr[chunksIdx[i]], chunksLenghts[i],
+								&outChunk, expectedSize);
+								chunksData[i] = outChunk;
+								decompChunksLenghts[i] = expectedSize;
+						}
+								
+						#pragma omp taskwait
+						//write results to the disk
+						#pragma omp task shared(chunksData, decompChunksLenghts)
+						{
+							std::ofstream outFile(removeSuffix(std::string(paths[pIdx]), ".pzip"), std::ios::binary);
+							for (int i = 0; i < chunksNumber; i++)
+							{
+								outFile.write(reinterpret_cast<const char *>(chunksData[i]), decompChunksLenghts[i]);
+								delete chunksData[i];
+							}
+							outFile.close();
 						}
 						#pragma omp taskwait
 					}
+
+					#pragma omp taskwait
+					//file is not needed anymore unmap it and delete it if needed
+					#pragma omp task shared(ptr, filesize, paths, pIdx)
+					{
+						unmapFile(ptr, filesize);
+						
+						if (REMOVE_ORIGIN)
+						{
+							unlink(paths[pIdx].c_str());
+						}
+					}
+					#pragma omp taskwait
 				}
 			}
 		}
+	}
 	
 	if (!success)
 	{

@@ -1,0 +1,3409 @@
+rm -f minizseq 
+\rm -f *.o *~
+g++ -std=c++20 -Wall  -I . -I miniz -O3 -ffast-math -DNDEBUG -o minizseq minizseq.cpp ./miniz/miniz.c -pthread -fopenmp
+g++ -std=c++20 -Wall  -I . -I miniz -O3 -ffast-math -DNDEBUG -o minizpar2 minizpar2.cpp ./miniz/miniz.c -pthread -fopenmp
+minizpar2.cpp: In function ‘int main(int, char**)’:
+minizpar2.cpp:117:33: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::vector<std::__cxx11::basic_string<char> >::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  117 |         for (int pIdx = 0; pIdx < paths.size(); pIdx++)
+      |                            ~~~~~^~~~~~~~~~~~~~
+minizpar2.cpp:126:56: warning: format ‘%s’ expects argument of type ‘char*’, but argument 3 has type ‘__gnu_cxx::__alloc_traits<std::allocator<std::__cxx11::basic_string<char> >, std::__cxx11::basic_string<char> >::value_type’ {aka ‘std::__cxx11::basic_string<char>’} [-Wformat=]
+  126 |                         std::fprintf(stderr, "mapFile %s failed\n", paths[pIdx]);
+      |                                                       ~^
+      |                                                        |
+      |                                                        char*
+minizpar2.cpp:147:51: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+  147 |                                 for (int i = 0; i < chunksNumber; i++)
+      |                                                 ~~^~~~~~~~~~~~~~
+minizpar2.cpp:197:43: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+  197 |                         for (int i = 0; i < chunksNumber; i++)
+      |                                         ~~^~~~~~~~~~~~~~
+minizpar2.cpp:205:43: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+  205 |                         for (int i = 0; i < chunksNumber; i++)
+      |                                         ~~^~~~~~~~~~~~~~
+minizpar2.cpp:213:51: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+  213 |                                 for (int i = 0; i < chunksNumber; i++)
+      |                                                 ~~^~~~~~~~~~~~~~
+minizpar2.cpp:224:67: warning: comparison of integer expressions of different signedness: ‘int’ and ‘size_t’ {aka ‘long unsigned int’} [-Wsign-compare]
+  224 |                                                 for (int i = 0; i < chunksNumber; i++)
+      |                                                                 ~~^~~~~~~~~~~~~~
+now generating benchmarks for various purposes
+making few big files with 1 repetitions
+25+0 records in
+25+0 records out
+52428800 bytes (52 MB, 50 MiB) copied, 0.517509 s, 101 MB/s
+50+0 records in
+50+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 1.05286 s, 99.6 MB/s
+100+0 records in
+100+0 records out
+209715200 bytes (210 MB, 200 MiB) copied, 1.87684 s, 112 MB/s
+making lots of small files behaviour with 500
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00153274 s, 3.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00167352 s, 6.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106512 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103526 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107573 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00127019 s, 8.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00139522 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000991075 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00122515 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109902 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00142531 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00152993 s, 6.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104007 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000937731 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104022 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00139176 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0013067 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105026 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102118 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116816 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000966476 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100824 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107489 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111448 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103914 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0014408 s, 7.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102437 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117168 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000940708 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111334 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100223 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111937 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00130507 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106576 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000968425 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117684 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104104 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00179857 s, 5.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103002 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110554 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00113695 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105097 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00097407 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101947 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000963971 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010976 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00097296 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012236 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000943997 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101212 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000995885 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133499 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0009408 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000984778 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103232 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101273 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00114053 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000949964 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00282436 s, 1.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000957126 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101208 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105688 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00160157 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000961214 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000919016 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00151351 s, 6.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105992 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00096413 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000975336 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104377 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000951563 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000969752 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128336 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000939419 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000962766 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109045 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000790612 s, 6.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000967287 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170459 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111542 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000953832 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00123868 s, 8.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100037 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106493 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010204 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000927368 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000918386 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000912904 s, 11.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00202201 s, 2.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010932 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000814937 s, 6.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112511 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000913115 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010377 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000848422 s, 6.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000986882 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000785809 s, 6.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000897686 s, 11.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111555 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000946366 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000897313 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000888034 s, 11.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00156249 s, 3.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100034 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106215 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00132512 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00163357 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000947475 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000896773 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104153 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170781 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102496 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103602 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107312 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00126908 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000965131 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011371 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00188689 s, 5.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00237651 s, 2.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001856 s, 5.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00096445 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101339 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0012167 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117369 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00110802 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0016136 s, 6.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00136378 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00142912 s, 7.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000997692 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108291 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00159817 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104647 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112648 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102825 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000873909 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00125513 s, 8.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000935032 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00152252 s, 6.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000893577 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109043 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133938 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00123598 s, 8.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000894718 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00145743 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000977974 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00095861 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00161705 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101096 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00119056 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00142901 s, 7.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128725 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106569 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00090256 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109928 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101252 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105646 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103231 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114967 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000855854 s, 6.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102954 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101187 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000953339 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00118927 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111075 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102269 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114932 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000967603 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000986855 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000823969 s, 6.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000927842 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00122355 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000913514 s, 11.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000891643 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106436 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00091249 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000941704 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000891486 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116157 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000898837 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00122119 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00095092 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106508 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103746 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103099 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000997203 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00120318 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101734 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012924 s, 7.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000914796 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000970348 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000796052 s, 6.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107864 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000861 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000812673 s, 12.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103675 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103046 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000833924 s, 6.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100085 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000978921 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108049 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000861778 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100504 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00110897 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001726 s, 5.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000941605 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100862 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101491 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011705 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00126742 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000976476 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000894631 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00173536 s, 5.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00171832 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000983024 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010613 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104698 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0012075 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010774 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000911201 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00233524 s, 4.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000919717 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100319 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00115491 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00148126 s, 6.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000984074 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000902569 s, 11.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000915278 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010221 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00114462 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00136112 s, 7.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00145521 s, 3.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00122715 s, 8.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00123671 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00155464 s, 6.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000852687 s, 6.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100141 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00126682 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112377 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000996432 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00156877 s, 6.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00149391 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00119119 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000888855 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106533 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00163934 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010667 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100213 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00150487 s, 6.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000999774 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102051 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00114958 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107208 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104529 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000971386 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00117777 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105956 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00147369 s, 3.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105057 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00108145 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010814 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121921 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103122 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105162 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00129138 s, 7.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000819008 s, 6.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000900317 s, 11.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00152658 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00286417 s, 3.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00115238 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117571 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106686 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101716 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00110801 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00127105 s, 8.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000853211 s, 6.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108589 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102836 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103605 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121489 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114386 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00116027 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109729 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121048 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116747 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170083 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0014609 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000997634 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012557 s, 8.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133436 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000954998 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121994 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00166305 s, 6.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000950719 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00172496 s, 5.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000938949 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00250784 s, 4.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00131881 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00135354 s, 7.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00119596 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105003 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000953764 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000935103 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000895524 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000969891 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00168029 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106563 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00134557 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000972785 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00118287 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000948317 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101704 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104464 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000962393 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105396 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00119286 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000993621 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00131971 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112756 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00095271 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109253 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000844748 s, 6.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105153 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101311 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108716 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000984319 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00122319 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0026167 s, 2.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000920067 s, 11.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000969694 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00144314 s, 7.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00186379 s, 2.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101008 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00135965 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110294 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011925 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102583 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000951797 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00169874 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00123133 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104618 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00219549 s, 2.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00162327 s, 6.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000864084 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00145543 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102389 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00141421 s, 7.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000916333 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00138806 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00109803 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102772 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170148 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00131374 s, 7.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104816 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113655 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00141427 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102974 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105578 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00241306 s, 4.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00163543 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000928196 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00109012 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109324 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000975228 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00124844 s, 8.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.001204 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000989589 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000918824 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00126961 s, 8.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000935039 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107949 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112779 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00147366 s, 6.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000862971 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114163 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010188 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113031 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00117933 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00136762 s, 7.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00168883 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102815 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00150008 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00120755 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00089414 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00145472 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000969999 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00119022 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000937955 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00122776 s, 8.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00150535 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106299 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00096927 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000836774 s, 12.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010137 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00162613 s, 6.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000911924 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00157636 s, 6.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000970117 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000986942 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000961255 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000967323 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00096301 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011263 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000960019 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000936331 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00125726 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00131379 s, 7.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00123864 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101353 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000928276 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000901541 s, 11.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111167 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00153249 s, 6.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000938435 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000985108 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000932595 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114736 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0014057 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101312 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106022 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00145784 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000998401 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000952348 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011989 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117378 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00151974 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103148 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00135675 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106835 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010388 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001208 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000991036 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00119918 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00113345 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114382 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121748 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00128162 s, 8.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00150471 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00118409 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111695 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114676 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00110716 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000920698 s, 11.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0012707 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011702 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00126076 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010044 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100074 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113268 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000913857 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00118735 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00149131 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000942687 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000919357 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00134804 s, 7.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112335 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110485 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011424 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011371 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00099584 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012198 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00108569 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110726 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101662 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103341 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000969398 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103668 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000858253 s, 6.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00238676 s, 4.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00110026 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010873 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00166048 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00137967 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00143916 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00159214 s, 6.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100256 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00146757 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000928344 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133575 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112707 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00097723 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00168477 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104652 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104365 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000994056 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00167381 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00154419 s, 6.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000948147 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001008 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102625 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00160324 s, 6.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100143 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104598 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011495 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104408 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00125029 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110589 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102286 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110743 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133786 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00115089 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000926728 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116175 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000949217 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000961144 s, 10.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128612 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106167 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102653 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001879 s, 5.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.001423 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102918 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000978357 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103736 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000992538 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00144061 s, 7.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0013301 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101483 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107468 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106988 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000895992 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112033 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000961858 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112495 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000964756 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000968841 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000983321 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011153 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00139349 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106758 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00114013 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00120509 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000949193 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103792 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00139245 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000969908 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000959829 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111892 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111818 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105513 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00131392 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00134856 s, 7.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00190898 s, 2.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103581 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00127545 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100428 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0334919 s, 153 kB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000990724 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00183334 s, 2.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103125 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00108578 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00158592 s, 6.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000971984 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117911 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00176896 s, 2.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000993417 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103565 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00171468 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170608 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108175 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00157026 s, 3.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000916546 s, 11.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101385 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00167587 s, 6.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000815664 s, 6.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00124195 s, 8.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00188203 s, 2.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00169642 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00109283 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107385 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00124629 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00168772 s, 6.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00115402 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110796 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00178706 s, 2.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00151543 s, 6.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000992394 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114992 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000929258 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113686 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133219 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0014904 s, 6.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00108317 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00163882 s, 6.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00186 s, 2.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00212902 s, 4.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103149 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00138902 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0014977 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0018265 s, 5.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100762 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00179732 s, 5.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00191432 s, 2.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00210437 s, 4.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112647 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105869 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104727 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106628 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.001263 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00171317 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00177094 s, 2.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104961 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00116791 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107361 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111467 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00191421 s, 5.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00167448 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00129194 s, 7.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00157643 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101708 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00191888 s, 2.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133445 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111081 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105481 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104866 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000905698 s, 11.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102409 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000996992 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133704 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0019039 s, 5.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00150416 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00289521 s, 3.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000912601 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00160835 s, 6.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00161317 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111944 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105006 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000979922 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107276 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0025241 s, 4.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000959576 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110683 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104983 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000924598 s, 11.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000956536 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00122886 s, 8.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00150172 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000964663 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000880709 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100431 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00261885 s, 2.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00120071 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128287 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00115401 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000936589 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107451 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000928806 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00171439 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000892134 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00141924 s, 7.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00164156 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106783 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00127361 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109283 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0016825 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00121599 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00149623 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00206882 s, 4.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0012777 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00183612 s, 5.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00184867 s, 2.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00171835 s, 6.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107713 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103674 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106953 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104456 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00170467 s, 3.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00167274 s, 6.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00163948 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104606 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105106 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000973773 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121036 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000950628 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000868302 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00127168 s, 8.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000963097 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010634 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000944119 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00139773 s, 7.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.002529 s, 2.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00132116 s, 7.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00288507 s, 1.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0017511 s, 5.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00138427 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012031 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101175 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00106262 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112446 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00132748 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101517 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111929 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00161405 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00169098 s, 6.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105396 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00153919 s, 6.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000998847 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010373 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000969371 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103462 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107945 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00132599 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00118469 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00128756 s, 8.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111763 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00190896 s, 5.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000964264 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102066 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000986837 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0016501 s, 6.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.001014 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00148736 s, 6.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000979371 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101274 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00165735 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104907 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000968409 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00183544 s, 5.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00223812 s, 2.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00175944 s, 5.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00120766 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00121842 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000837321 s, 6.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010584 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00182256 s, 2.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00107037 s, 9.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105657 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00150029 s, 6.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000918101 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113233 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104681 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001289 s, 7.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000907323 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108938 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000950821 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00087965 s, 11.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000988478 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108737 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000979184 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117189 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000922677 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112367 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000891751 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0017902 s, 5.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00084572 s, 6.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113281 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102567 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104143 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000951906 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133021 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00175829 s, 2.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103815 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103552 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000934759 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102744 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010328 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000939655 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00146546 s, 7.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00094127 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000917473 s, 11.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133589 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000975455 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111917 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000998078 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100787 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103388 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104725 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105601 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000929996 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00175129 s, 5.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00125552 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111312 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000897428 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00119335 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102425 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010984 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00114991 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116372 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000866335 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101716 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0013756 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.001041 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000914077 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000943874 s, 10.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00116055 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0017684 s, 5.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000967003 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114558 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106179 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100819 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000770367 s, 6.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00115687 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000886668 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00149363 s, 6.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000750018 s, 6.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000818867 s, 12.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000906303 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102794 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00144159 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101612 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00264142 s, 1.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00144156 s, 7.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102863 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000969063 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121424 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111579 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000953028 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111052 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00387548 s, 1.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012114 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000887828 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00113633 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101855 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109189 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106406 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114628 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000994537 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00226851 s, 4.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000933232 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00140567 s, 7.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000976377 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00111012 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100779 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109742 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100953 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00161588 s, 6.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000958159 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103173 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000963084 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0015301 s, 6.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00126204 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00121407 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000957547 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00121587 s, 8.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000903976 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000987423 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000947522 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102307 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000975325 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102862 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010455 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00143073 s, 7.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000936555 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102723 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102156 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00139059 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000964023 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00115647 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00113529 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00157478 s, 6.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00153832 s, 3.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000906717 s, 11.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102602 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000980986 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0010909 s, 4.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100618 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000938129 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00175559 s, 5.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000965629 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105016 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112641 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000980161 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00125193 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103397 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000964436 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133884 s, 7.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000894053 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112622 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000897464 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00132438 s, 7.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00113999 s, 4.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00120786 s, 8.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00115625 s, 4.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114143 s, 9.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000798903 s, 6.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00156333 s, 6.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128041 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102146 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000942409 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00112657 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00092353 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000972026 s, 10.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00117728 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00119379 s, 8.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00130509 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000936582 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000985102 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00114774 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000918501 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103834 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000982671 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00256816 s, 4.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102198 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000964559 s, 10.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000927692 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00127176 s, 8.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00112126 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00109266 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00157829 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00103514 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102585 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00140686 s, 7.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00117918 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108386 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00101858 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000994771 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102734 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000987574 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00104853 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00124388 s, 8.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00103161 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000895218 s, 11.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00102126 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010352 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00163415 s, 3.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000994617 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000924336 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105155 s, 9.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00107646 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000982867 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000987262 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011559 s, 8.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100165 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011303 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000925651 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011128 s, 9.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00121817 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000903678 s, 11.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00133037 s, 3.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010972 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00106749 s, 4.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00101837 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000943603 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00105011 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00119221 s, 4.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100195 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000866487 s, 5.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117209 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000806496 s, 6.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104516 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.001019 s, 5.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000933604 s, 11.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00130287 s, 3.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000941533 s, 10.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000795861 s, 6.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000891448 s, 11.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00141251 s, 3.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0010352 s, 9.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000754636 s, 6.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000845804 s, 12.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000992017 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0011264 s, 9.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0012517 s, 4.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108138 s, 9.5 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000959289 s, 5.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00117095 s, 8.7 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000907266 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00138122 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00161188 s, 3.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102386 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00180613 s, 2.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0012872 s, 8.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00120994 s, 4.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000917825 s, 11.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0011013 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000983861 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000914457 s, 5.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00104631 s, 9.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000845209 s, 6.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00129693 s, 7.9 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000898805 s, 5.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00133927 s, 7.6 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000980147 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00138708 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105298 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00110604 s, 9.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00111092 s, 4.6 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00116242 s, 8.8 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000883711 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000900272 s, 11.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000886544 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.000995556 s, 10.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000953159 s, 5.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100948 s, 10.1 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00151378 s, 3.4 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00137632 s, 7.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000887351 s, 5.8 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00102016 s, 10.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00139273 s, 3.7 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00100746 s, 10.2 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.0009314 s, 5.5 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00127574 s, 8.0 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00128189 s, 4.0 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00139671 s, 7.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00100663 s, 5.1 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00098127 s, 10.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000988501 s, 5.2 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108719 s, 9.4 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.00105053 s, 4.9 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.0014054 s, 7.3 MB/s
+5+0 records in
+5+0 records out
+5120 bytes (5.1 kB, 5.0 KiB) copied, 0.000818992 s, 6.3 MB/s
+10+0 records in
+10+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 0.00108511 s, 9.4 MB/s
+benchmarks done
+now testing performances on smallfiles_dir
+
+schedule_type,threads_number,block_sizes(bytes),iteration,compile_time(s),decompile_time(s)
+sequential,0,0,1,2.92314,2.02691
+dynamic,1,1000,1,3.75073,2.7618
+dynamic,1,10000,1,2.94073,3.02666
+dynamic,1,100000,1,3.33874,4.34477
+dynamic,1,1000000,1,3.82332,3.04191
+static,1,1000,1,3.42289,3.64496
+static,1,10000,1,3.6703,3.28419
+static,1,100000,1,4.36212,3.74046
+static,1,1000000,1,3.71461,3.26573
+guided,1,1000,1,3.79407,3.38141
+guided,1,10000,1,3.52811,6.23981
+guided,1,100000,1,6.51729,6.68828
+guided,1,1000000,1,5.14584,3.39297
+dynamic,2,1000,1,3.36966,3.17373
+dynamic,2,10000,1,4.47246,3.60291
+dynamic,2,100000,1,3.64524,4.00484
+dynamic,2,1000000,1,3.75098,3.68008
+static,2,1000,1,3.71954,3.77294
+static,2,10000,1,3.73711,4.66725
+static,2,100000,1,4.16732,4.68338
+static,2,1000000,1,4.70519,4.46543
+guided,2,1000,1,4.51031,3.76991
+guided,2,10000,1,3.70395,4.04004
+guided,2,100000,1,4.25944,3.6344
+guided,2,1000000,1,5.21719,4.85927
+dynamic,4,1000,1,4.24458,4.53278
+dynamic,4,10000,1,3.49443,4.15612
+dynamic,4,100000,1,4.45811,3.91105
+dynamic,4,1000000,1,5.11096,5.64932
+static,4,1000,1,5.53342,5.47342
+static,4,10000,1,3.91535,4.08368
+static,4,100000,1,3.91525,3.37362
+static,4,1000000,1,4.0564,3.38379
+guided,4,1000,1,3.46625,3.91556
+guided,4,10000,1,3.72674,3.50865
+guided,4,100000,1,3.5393,5.784
+guided,4,1000000,1,5.02278,4.76125
+dynamic,8,1000,1,3.82647,3.2708
+dynamic,8,10000,1,5.95635,3.23966
+dynamic,8,100000,1,3.76891,3.48481
+dynamic,8,1000000,1,3.97787,4.08614
+static,8,1000,1,5.56639,3.82357
+static,8,10000,1,3.62367,3.2732
+static,8,100000,1,4.44126,3.4634
+static,8,1000000,1,3.736,3.70295
+guided,8,1000,1,3.57668,3.23129
+guided,8,10000,1,3.74895,3.1615
+guided,8,100000,1,3.58304,4.99732
+guided,8,1000000,1,4.60417,4.23379
+dynamic,16,1000,1,5.38354,4.22403
+dynamic,16,10000,1,5.07481,3.30103
+dynamic,16,100000,1,3.36908,3.11408
+dynamic,16,1000000,1,6.08299,4.10161
+static,16,1000,1,3.71011,3.41792
+static,16,10000,1,3.41349,4.8924
+static,16,100000,1,3.54278,3.14105
+static,16,1000000,1,3.66454,10.9468
+guided,16,1000,1,3.91582,3.79658
+guided,16,10000,1,3.409,3.27789
+guided,16,100000,1,5.12403,10.0004
+guided,16,1000000,1,5.49185,3.44696
+dynamic,32,1000,1,4.34915,3.04082
+dynamic,32,10000,1,4.7951,3.23097
+dynamic,32,100000,1,4.11088,5.49837
+dynamic,32,1000000,1,3.51554,3.25217
+static,32,1000,1,3.74421,4.63074
+static,32,10000,1,4.48197,4.34669
+static,32,100000,1,5.02404,3.47844
+static,32,1000000,1,4.53993,4.20083
+guided,32,1000,1,3.88742,3.44646
+guided,32,10000,1,4.46267,3.23073
+guided,32,100000,1,3.66211,3.32853
+guided,32,1000000,1,4.59718,4.56084
+sequential,0,0,2,3.75327,1.63712
+dynamic,1,1000,2,3.67414,4.0288
+dynamic,1,10000,2,3.51007,3.55335
+dynamic,1,100000,2,4.65128,4.4829
+dynamic,1,1000000,2,4.42566,3.91125
+static,1,1000,2,4.44719,4.59591
+static,1,10000,2,4.32191,4.15472
+static,1,100000,2,5.13928,5.01784
+static,1,1000000,2,3.59161,4.81526
+guided,1,1000,2,4.11981,4.21401
+guided,1,10000,2,3.88042,3.80459
+guided,1,100000,2,3.42167,4.17949
+guided,1,1000000,2,4.24301,3.41387
+dynamic,2,1000,2,3.581,3.79385
+dynamic,2,10000,2,4.96725,4.62073
+dynamic,2,100000,2,5.311,3.4386
+dynamic,2,1000000,2,5.44983,4.66404
+static,2,1000,2,5.37785,3.78673
+static,2,10000,2,3.68828,6.3919
+static,2,100000,2,3.69806,6.10895
+static,2,1000000,2,3.78012,3.32332
+guided,2,1000,2,5.14044,4.01394
+guided,2,10000,2,4.39231,7.72783
+guided,2,100000,2,3.72549,4.20691
+guided,2,1000000,2,3.75687,4.61685
+dynamic,4,1000,2,3.80279,10.08
+dynamic,4,10000,2,3.52791,3.49331
+dynamic,4,100000,2,3.52253,3.6834
+dynamic,4,1000000,2,5.44235,3.40643
+static,4,1000,2,4.29535,4.3143
+static,4,10000,2,3.45981,3.90672
+static,4,100000,2,3.64689,3.62141
+static,4,1000000,2,4.53795,8.49849
+guided,4,1000,2,4.64844,3.35264
+guided,4,10000,2,3.61609,3.26423
+guided,4,100000,2,6.78156,4.31574
+guided,4,1000000,2,7.25296,5.93512
+dynamic,8,1000,2,3.57632,5.7618
+dynamic,8,10000,2,4.22013,3.37402
+dynamic,8,100000,2,6.60431,4.98159
+dynamic,8,1000000,2,6.64769,7.30358
+static,8,1000,2,4.58778,7.77335
+static,8,10000,2,4.82804,4.21051
+static,8,100000,2,5.84526,4.73457
+static,8,1000000,2,8.0952,3.9144
+guided,8,1000,2,3.8764,3.47466
+guided,8,10000,2,3.42884,3.4152
+guided,8,100000,2,3.35947,3.77911
+guided,8,1000000,2,4.45213,6.60286
+dynamic,16,1000,2,3.53494,5.64994
+dynamic,16,10000,2,3.48963,6.11351
+dynamic,16,100000,2,3.23186,3.85044
+dynamic,16,1000000,2,7.10664,7.32186
+static,16,1000,2,3.57371,3.48315
+static,16,10000,2,4.17697,4.5696
+static,16,100000,2,5.97535,3.28365
+static,16,1000000,2,3.30962,4.0351
+guided,16,1000,2,4.63066,3.17967
+guided,16,10000,2,3.62738,5.469
+guided,16,100000,2,4.04452,3.24208
+guided,16,1000000,2,5.98195,4.12561
+dynamic,32,1000,2,3.51866,3.88633
+dynamic,32,10000,2,6.35339,4.2234
+dynamic,32,100000,2,4.15362,3.7505
+dynamic,32,1000000,2,3.46634,6.01475
+static,32,1000,2,3.60574,5.50277
+static,32,10000,2,4.22329,3.79723
+static,32,100000,2,7.46334,3.73815
+static,32,1000000,2,3.74003,3.45534
+guided,32,1000,2,4.28299,3.37183
+guided,32,10000,2,3.57552,4.48898
+guided,32,100000,2,5.64577,3.85075
+guided,32,1000000,2,3.52761,3.64026
+sequential,0,0,3,3.49553,1.63046
+dynamic,1,1000,3,3.52766,3.36913
+dynamic,1,10000,3,3.55701,6.25259
+dynamic,1,100000,3,3.85391,4.26029
+dynamic,1,1000000,3,4.00076,4.05349
+static,1,1000,3,7.08459,6.27501
+static,1,10000,3,7.10771,3.61857
+static,1,100000,3,5.65815,5.22947
+static,1,1000000,3,5.89878,4.55074
+guided,1,1000,3,3.93716,3.38553
+guided,1,10000,3,3.81591,4.10905
+guided,1,100000,3,3.98857,4.2506
+guided,1,1000000,3,5.86094,3.50603
+dynamic,2,1000,3,3.666,4.01957
+dynamic,2,10000,3,5.1541,9.67303
+dynamic,2,100000,3,4.06842,5.23816
+dynamic,2,1000000,3,3.87562,6.01477
+static,2,1000,3,4.01773,4.58724
+static,2,10000,3,5.66237,3.41657
+static,2,100000,3,3.74306,4.77551
+static,2,1000000,3,4.94373,9.04712
+guided,2,1000,3,3.81754,3.41516
+guided,2,10000,3,4.27586,4.16052
+guided,2,100000,3,3.83027,7.44318
+guided,2,1000000,3,3.91079,3.26574
+dynamic,4,1000,3,5.96889,9.91271
+dynamic,4,10000,3,10.009,3.71772
+dynamic,4,100000,3,5.70535,3.76874
+dynamic,4,1000000,3,5.75389,9.51845
+static,4,1000,3,6.15015,3.15657
+static,4,10000,3,4.43748,7.10686
+static,4,100000,3,3.60449,4.7008
+static,4,1000000,3,5.38434,3.92313
+guided,4,1000,3,4.00125,3.99946
+guided,4,10000,3,5.75427,8.88858
+guided,4,100000,3,4.22262,3.50675
+guided,4,1000000,3,4.45553,4.93455
+dynamic,8,1000,3,4.7401,6.10014
+dynamic,8,10000,3,4.28456,3.34055
+dynamic,8,100000,3,6.04239,3.53299
+dynamic,8,1000000,3,3.62944,3.46276
+static,8,1000,3,3.52215,3.46018
+static,8,10000,3,4.12361,4.61693
+static,8,100000,3,6.85073,3.22103
+static,8,1000000,3,3.58676,3.88534
+guided,8,1000,3,3.46179,3.28632
+guided,8,10000,3,3.54912,4.24973
+guided,8,100000,3,4.31647,3.26252
+guided,8,1000000,3,3.76736,4.23054
+dynamic,16,1000,3,3.48548,4.48778
+dynamic,16,10000,3,3.39066,3.87372
+dynamic,16,100000,3,3.59178,3.48746
+dynamic,16,1000000,3,4.08784,5.15073
+static,16,1000,3,4.67483,3.08494
+static,16,10000,3,3.69071,3.01277
+static,16,100000,3,3.78708,3.32585
+static,16,1000000,3,4.70031,3.22896
+guided,16,1000,3,3.98593,3.19858
+guided,16,10000,3,4.07355,5.32701
+guided,16,100000,3,4.36397,3.73315
+guided,16,1000000,3,3.31064,5.17458
+dynamic,32,1000,3,3.79442,3.08568
+dynamic,32,10000,3,3.57412,4.43251
+dynamic,32,100000,3,3.51204,3.70782
+dynamic,32,1000000,3,5.23358,5.40535
+static,32,1000,3,4.20286,4.14813
+static,32,10000,3,6.16227,10.0388
+static,32,100000,3,5.94112,5.28439
+static,32,1000000,3,6.13068,6.91751
+guided,32,1000,3,5.32714,4.7967
+guided,32,10000,3,4.73843,3.78686
+guided,32,100000,3,3.50773,3.56699
+guided,32,1000000,3,5.17906,3.46231
+sequential,0,0,4,3.54437,4.93046
+dynamic,1,1000,4,3.557,3.59291
+dynamic,1,10000,4,3.54162,14.0582
+dynamic,1,100000,4,3.50674,10.1125
+dynamic,1,1000000,4,3.71075,3.97052
+static,1,1000,4,3.82996,4.06336
+static,1,10000,4,6.46663,4.21323
+static,1,100000,4,3.7271,3.56548
+static,1,1000000,4,5.13327,3.86496
+guided,1,1000,4,4.08411,3.48117
+guided,1,10000,4,3.72024,6.35757
+guided,1,100000,4,4.5797,3.38163
+guided,1,1000000,4,3.83188,3.24072
+dynamic,2,1000,4,4.83294,4.66954
+dynamic,2,10000,4,4.45026,5.7423
+dynamic,2,100000,4,7.301,4.30287
+dynamic,2,1000000,4,3.42869,3.49414
+static,2,1000,4,4.18912,4.05751
+static,2,10000,4,3.81155,4.34648
+static,2,100000,4,3.61076,3.63161
+static,2,1000000,4,4.98274,5.45075
+guided,2,1000,4,5.60801,3.49405
+guided,2,10000,4,4.54064,4.58582
+guided,2,100000,4,4.13527,3.66233
+guided,2,1000000,4,4.39105,4.89977
+dynamic,4,1000,4,3.73855,6.17123
+dynamic,4,10000,4,3.70873,4.62206
+dynamic,4,100000,4,3.55493,4.56133
+dynamic,4,1000000,4,3.62969,3.71576
+static,4,1000,4,13.8005,11.8143
+static,4,10000,4,7.83048,7.8146
+static,4,100000,4,7.15837,3.29075
+static,4,1000000,4,5.68848,6.26323
+guided,4,1000,4,5.77802,6.57261
+guided,4,10000,4,6.31396,4.61295
+guided,4,100000,4,3.35371,5.67273
+guided,4,1000000,4,5.21908,5.2828
+dynamic,8,1000,4,4.35606,4.6903
+dynamic,8,10000,4,3.56629,4.16837
+dynamic,8,100000,4,3.82525,4.02659
+dynamic,8,1000000,4,4.40509,4.11651
+static,8,1000,4,7.15284,3.7361
+static,8,10000,4,4.63144,4.1449
+static,8,100000,4,3.82116,3.95806
+static,8,1000000,4,3.90617,4.91649
+guided,8,1000,4,4.01673,3.1437
+guided,8,10000,4,3.49004,3.30066
+guided,8,100000,4,3.46704,3.32427
+guided,8,1000000,4,3.70495,3.31548
+dynamic,16,1000,4,3.52574,3.17439
+dynamic,16,10000,4,4.30344,3.83228
+dynamic,16,100000,4,3.44917,3.21479
+dynamic,16,1000000,4,4.69503,3.18473
+static,16,1000,4,3.96012,3.08336
+static,16,10000,4,4.84686,4.88703
+static,16,100000,4,3.44796,4.76384
+static,16,1000000,4,4.22588,3.17404
+guided,16,1000,4,3.95933,4.02753
+guided,16,10000,4,3.56629,3.22312
+guided,16,100000,4,4.2222,3.95145
+guided,16,1000000,4,3.40639,5.81734
+dynamic,32,1000,4,3.9112,4.54945
+dynamic,32,10000,4,4.64294,5.60426
+dynamic,32,100000,4,4.99274,4.27431
+dynamic,32,1000000,4,5.01317,4.59678
+static,32,1000,4,3.74214,3.6496
+static,32,10000,4,3.49738,3.73003
+static,32,100000,4,4.81011,6.23786
+static,32,1000000,4,3.48579,5.14876
+guided,32,1000,4,3.6757,3.21781
+guided,32,10000,4,7.86527,3.57692
+guided,32,100000,4,4.50027,7.40887
+guided,32,1000000,4,4.43543,6.64639
+sequential,0,0,5,9.48247,4.03988
+dynamic,1,1000,5,6.25085,4.21205
+dynamic,1,10000,5,4.41656,4.0211
+dynamic,1,100000,5,4.75987,4.91476
+dynamic,1,1000000,5,4.93895,4.23064
+static,1,1000,5,4.56895,3.84243
+static,1,10000,5,3.94938,4.48846
+static,1,100000,5,5.12114,4.67235
+static,1,1000000,5,4.27591,4.30981
+guided,1,1000,5,4.1931,4.23232
+guided,1,10000,5,4.05792,4.50459
+guided,1,100000,5,4.07983,4.13948
+guided,1,1000000,5,4.15709,4.29835
+dynamic,2,1000,5,4.14982,4.01949
+dynamic,2,10000,5,4.68328,4.05793
+dynamic,2,100000,5,3.93373,8.54991
+dynamic,2,1000000,5,5.19855,5.22241
+static,2,1000,5,10.6887,7.04622
+static,2,10000,5,4.45914,5.68519
+static,2,100000,5,6.00533,4.80788
+static,2,1000000,5,4.9074,6.13255
+guided,2,1000,5,7.39962,4.74574
+guided,2,10000,5,4.47944,4.45972
+guided,2,100000,5,4.7844,4.47066
+guided,2,1000000,5,4.37215,4.54606
+dynamic,4,1000,5,4.78342,4.4912
+dynamic,4,10000,5,4.36848,4.33693
+dynamic,4,100000,5,4.57186,7.05252
+dynamic,4,1000000,5,10.324,5.68445
+static,4,1000,5,3.89107,4.30505
+static,4,10000,5,3.91557,5.47414
+static,4,100000,5,3.84818,5.60965
+static,4,1000000,5,3.70302,4.15599
+guided,4,1000,5,5.65484,13.1325
+guided,4,10000,5,3.81432,3.59187
+guided,4,100000,5,4.10059,3.62666
+guided,4,1000000,5,5.50793,5.42914
+dynamic,8,1000,5,6.9185,3.86558
+dynamic,8,10000,5,6.86857,12.0362
+dynamic,8,100000,5,7.4206,9.05673
+dynamic,8,1000000,5,5.76514,3.65012
+static,8,1000,5,4.42238,3.81756
+static,8,10000,5,5.62402,8.35038
+static,8,100000,5,7.57593,4.84182
+static,8,1000000,5,5.30606,5.18749
+guided,8,1000,5,5.47108,5.0829
+guided,8,10000,5,7.4771,3.80266
+guided,8,100000,5,3.59464,3.96936
+guided,8,1000000,5,6.39261,3.98324
+dynamic,16,1000,5,9.31445,8.17615
+dynamic,16,10000,5,5.92652,6.96786
+dynamic,16,100000,5,4.12512,3.11407
+dynamic,16,1000000,5,3.47215,3.10795
+static,16,1000,5,5.49049,4.28226
+static,16,10000,5,4.90718,5.1929
+static,16,100000,5,4.17061,3.41286
+static,16,1000000,5,4.36858,7.32295
+guided,16,1000,5,3.3651,3.57678
+guided,16,10000,5,4.3933,3.71226
+guided,16,100000,5,3.36154,5.40847
+guided,16,1000000,5,3.4009,4.78
+dynamic,32,1000,5,4.2356,4.9075
+dynamic,32,10000,5,5.25116,4.11527
+dynamic,32,100000,5,4.58334,4.40198
+dynamic,32,1000000,5,4.84069,4.32747
+static,32,1000,5,5.513,4.10897
+static,32,10000,5,4.93813,4.27868
+static,32,100000,5,4.50325,4.21468
+static,32,1000000,5,4.87752,3.91669
+guided,32,1000,5,4.2371,3.86439
+guided,32,10000,5,3.90078,3.68487
+guided,32,100000,5,4.07527,3.69895
+guided,32,1000000,5,4.30703,3.86765

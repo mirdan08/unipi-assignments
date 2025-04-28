@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the CSV
-filename = "smallfiles_results.csv"  # Change this to your file path
+filename = "bigfiles_task_results.csv"  # Change this to your file path
 df = pd.read_csv(filename)
 
 # Group by schedule_type, threads_number, block_sizes(bytes)
@@ -26,5 +26,5 @@ grouped_mean.columns = [col + '_std' for col in grouped_mean.columns]
 # Step 4: Concatenate again properly
 combined = pd.concat([grouped_mean, grouped_dev], axis=1)[new_cols]
 
-combined.to_csv("smallfiles_results_averaged.csv")
+combined.to_csv("bigfiles_task_results_averaged.csv")
 
