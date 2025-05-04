@@ -1,0 +1,219 @@
+# fundamentals of pattern recognition
+- time series
+	- mean and auto-covariance
+	- autocorrelation
+	- cross-correlation
+	- discrete convolution
+	- autorregressive process and ARMA
+- fourier transform
+	- functions representation
+	- discrete time series
+	- discreet fourier transform
+	- other spectral descriptors
+- image processing
+	- descriving local image poperties
+		- intensity vector
+		- distribuion based descriptors
+		- SIFT
+		- gaussian filtering 
+		- gradient and filters
+		- foureri analysis on images
+		- convolution theorem
+		- DFT on images
+	- visual detectors
+		- edges and gradients
+		- blob detection
+		- laplacian of a gaussian
+		- affine detectors
+		- MSER
+		- image segmentation
+		- normalized cuts
+		- superpixels
+- wavelets
+	- DFT limitations
+	- wavelets
+	- coefficent plots
+	- discrete wavelet transform
+
+# probabilistic (generative) learning
+- graphical model representation
+- approaches to inference
+	- bayesian
+	- Maximum a posteriori
+	- Maximum likelihood
+- graphical models
+- bayesian networks
+	- full plate notations
+	- local markov property
+	- markov blanket
+	- factorization and ancestral sampling
+	- BN structures
+		- tail to tail
+		- head to tail
+		- head to head
+		- derived independence relationships
+		- d-separation
+	- markov random fields
+		- Conditional random fields
+			- feature functions
+			- posterior inference
+			- training
+				- likelihood facorization
+					- SGD
+			- uses in Vision
+				- background segmentation
+				- image completion
+				- semantic segmentation
+		- lilelihood factorization
+			- partition function
+			- potential functions
+			- bolzmann distribution
+				- factor graphs
+		- maximal clique factorization
+		- structure finding approaches
+			- search and score
+				- scoring function
+				- search strategy
+				- constraint based models
+				- testing strategy
+				- PC algorithm
+	- hidden markov model
+		- markov chains (First Order)
+		- hidden markov model
+			
+		- inference problems
+			- smoothing
+				- forward backward algorithm
+					- sum-product message passing
+			- learning(by maximum likelihood)
+				- expectation maximization
+					- E-step
+					- M-step
+			- optimal state assignment
+				- viterbi
+			- input output markov models
+			- bidirectional input driven models
+			- coupled HMM
+			- dynamic bayesian networks
+	- Baesian learning
+		- latent variables
+		- tractability
+		- Kullback-Leibler divergence
+			- jensen inequaility
+			- tightness of the lower bound
+			- reformulation of Expectation maximization
+			- Latent Dirichlet Allocation
+				- Dirichlet distribution
+				- Geometric interpretation
+			- uses in text analysis
+			- generative process
+			- learning
+			- posterior inference
+				- Variational LDA distribution (?)
+				- Variational EM
+		- understanding image collections
+			- visterms and visterm vocabulary
+			- representing image as a bag of terms
+			- unsupervised semantic segmentation
+			- dynamic topic models
+	- sampling methods
+		- approximating expectations
+		- learning parameters
+			- properties of sampling
+			- sampling procedures
+			- univariate sampling
+				- unitary stick
+				- multivariarte sampling
+					- naive sampling
+					- ancestral sampling
+					- gibbs sampling
+	 - Boltzmann machines
+		 - energy function
+		 - stochastic binary neurons
+			 - sigmoidal sotchastic binary network
+			 - bolztmann gibbs distribution
+				 - learning theorm for binary vectors
+				 - log likelihood maximization
+				 - gradient apporach
+					 - free expectations
+					 - clamped epxectations
+					 - hebbian learning
+					 - learning with hidden variables
+		- Restricted Boltzmann machines
+			- gibbs sampling approach (wake+ dream parts)
+			- Contrastive divergence learning
+		- examples digit recognition
+# deep learning
+- convolutional neural networks
+	- dense vector multiplication
+	- convolution
+	- convolutional filter
+	- convolution features
+	- multi channel convolution
+	- stride
+	- map size
+		- width
+		- height
+	- padding
+	- feature map transformation
+	- pooling
+	- convolutional architectures
+	- sparse connectivity
+	- cross channel pooling and spatial invariance
+	- training CNN
+		- backpropagation on convolution
+		- deconvolution
+		- 1x1 convolutions
+		- batch normalization
+		- residual connections
+	- MobileNets
+	- Deconvnet
+		- inspect deconvolution layers
+		- causal convolutions
+		- dilated convolutions
+	- fully convolutional networks
+	- deconvolution architecture
+	- segnet
+- auto encoders
+	- basic AE
+	- sparse AE
+	- denoising AE
+	- manifold learning
+	- contractive AE
+	- deep AE
+	- unsupervised layerwise pretraining
+		- use RBM to do this
+	- DBM
+		- double contribution trick
+	- multimodal DBM
+- sequences in NN
+- supervised recurrent tasks
+- RNN design
+	- forward pass
+	- long term dependencies
+	- vanishing gradient anmd exploding gradient
+	- bounding the gradient
+	- gradient clipping
+- LSTM
+	- design
+	- equations
+	- deep version
+- GRU
+- constant error propagation
+- recurrent weights
+- attention
+	- position
+- neural memories
+	- zone out
+	- depth of the network
+	- zone out
+	- clockwork RNN
+	- hierarchical sequence structure
+	- HM-RNN
+	- neural reasoning
+	- memory netowrk components
+	- end to end
+	- neural turing machines
+# generative deep learning
+
+# advanced topics and applications

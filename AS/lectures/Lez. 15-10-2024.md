@@ -1,0 +1,2 @@
+- set schedule become import schedules.
+- try to identify the best and most impactful minimum viable product, basically less development and more features is a win-win situation.
