@@ -1,4 +1,5 @@
 #include<vector>
+
 const size_t RPAYLOAD=100;
 
 struct Record { 
