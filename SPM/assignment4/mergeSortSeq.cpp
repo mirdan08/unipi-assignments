@@ -8,16 +8,17 @@
 #include <getopt.h>
 #include <chrono>
 
-int main(char*argv[],int argc){
+int main(int argc,char*argv[]){
 
     //parsing arguments
     size_t arraySize=100;
     size_t recordSize = 0;
     int numThreads = 0;
     bool verboseOutput=false;
+
     int opt;
     while ((opt = getopt(argc, argv, "s:r:t:v")) != -1) {
-        std::cout << "CIAO" << std::endl;
+
         switch (opt) {
             case 's':
                 arraySize = std::stoull(optarg);
@@ -29,13 +30,13 @@ int main(char*argv[],int argc){
                 numThreads = std::stoi(optarg);
                 break;
             case 'v':
-            break;
+                verboseOutput=true;
+                break;
             default:
             std::cout << "wrong arguments" << std::endl;
             return EXIT_FAILURE;
         }
     }
-    verboseOutput=true;
     unsigned int seed=42;
     std::mt19937 gen(seed); 
     std::uniform_int_distribution<> dis(0, 100);
@@ -54,7 +55,7 @@ int main(char*argv[],int argc){
     sequentialMergeSort(dataVector,0,dataVector.size());
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    std::cout<< "time(s):" << duration.count() << std::endl;
+    std::cout<< "time(ms):" << duration.count() << std::endl;
     if(verboseOutput){
         std::cout<< "RESULT:" << std::endl;
         unsigned int i=1;
