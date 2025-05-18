@@ -142,27 +142,38 @@ int main(int argc,char*argv[]){
 
     int opt;
 
-    while ((opt = getopt(argc, argv, "s:r:t:v:l")) != -1) {
+    while ((opt = getopt(argc, argv, "s:r:t:v:l:")) != -1) {
 
         switch (opt) {
-            case 's':
+            case 's': {
+
                 arraySize = std::stoull(optarg);
                 break;
-            case 'r':
+            }
+            case 'r': {
+
                 recordSize = std::stoull(optarg);
                 break;
-            case 't':
+            }
+            case 't': {
+
                 numThreads = std::stoi(optarg);
                 break;
-            case 'l':
+            }
+            case 'l':{
                 leafSize = std::stoi(optarg);
                 break;
-            case 'v':
-                verboseOutput=true;
+            }
+            case 'v':{
+                int v = std::stoi(optarg);
+                verboseOutput= (v>0?true:false);
                 break;
-            default:
+            }
+            default:{
+
                 std::cout << "wrong arguments" << std::endl;
                 return EXIT_FAILURE;
+            }
         }
     }
 
@@ -171,7 +182,7 @@ int main(int argc,char*argv[]){
     unsigned int seed=42;
     std::mt19937 gen(seed); 
 
-    std::uniform_int_distribution<> keyDis(0, 100);
+    std::uniform_int_distribution<> keyDis(0, 10000000);
     std::uniform_int_distribution<>  charDis(33, 126);
 
 

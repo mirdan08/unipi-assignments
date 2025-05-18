@@ -17,7 +17,7 @@ int main(int argc,char*argv[]){
     bool verboseOutput=false;
 
     int opt;
-    while ((opt = getopt(argc, argv, "s:r:t:v")) != -1) {
+    while ((opt = getopt(argc, argv, "s:r:v")) != -1) {
 
         switch (opt) {
             case 's':
@@ -25,9 +25,6 @@ int main(int argc,char*argv[]){
                 break;
             case 'r':
                 recordSize = std::stoull(optarg);
-                break;
-            case 't':
-                numThreads = std::stoi(optarg);
                 break;
             case 'v':
                 verboseOutput=true;
