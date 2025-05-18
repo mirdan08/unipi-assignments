@@ -1,13 +1,13 @@
 CXX		= g++ -std=c++20
-INCLUDES	= 
+INCLUDES	= -Ifastflow/
 CXXFLAGS  	+= -Wall 
 
 LDFLAGS 	= -pthread -fopenmp -Wall -Wextra
 OPTFLAGS	= -O3 -ffast-math -DNDEBUG
 
-TARGETS		= mergeSortSeq
+TARGETS		=  mergeSortPar
 
-SRCS= mergesort.cpp mergeSortSeq.cpp
+SRCS= mergesort.cpp mergeSortPar.cpp
 
 OBJS      = $(SRCS:.cpp=.o)
 

@@ -1,10 +1,11 @@
 #include<vector>
+#include <ff/ff.hpp>
 
-const size_t RPAYLOAD=100;
+//const size_t RPAYLOAD=100;
 
 struct Record { 
     unsigned long key;  // sorting value 
-    char rpayload[RPAYLOAD]; 
+    char* rpayload; 
 }; 
 
 void sequentialMerge(std::vector<int>& arr, int left, int mid, int right);
