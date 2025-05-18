@@ -19,6 +19,12 @@
 using OrderedArray=std::vector<Record>;
 using task_t=std::pair<OrderedArray*,OrderedArray*>;
 
+//parsing arguments
+size_t arraySize=100;
+size_t recordSize = 100;
+size_t leafSize = 11;
+size_t numThreads = 8;
+
 class StreamParser: public ff::ff_node_t<OrderedArray,OrderedArray>
 {
     public: 
@@ -27,25 +33,18 @@ class StreamParser: public ff::ff_node_t<OrderedArray,OrderedArray>
         OrderedArray* svc(OrderedArray* in){
             
             int n = datastream.size();
-            for(int i=0;i<n;i+=2){
-                OrderedArray* partialRes=new OrderedArray();
+            for(int i=0;i<n;i+=leafSize){
                 //start from base case and order if necessary
-                if(n-i>=2){
-                    if(datastream[i].key<=datastream[i+1].key){
-                        partialRes->push_back(datastream[i]);
-                        partialRes->push_back(datastream[i+1]);
-                    }else{
-                        partialRes->push_back(datastream[i+1]);
-                        partialRes->push_back(datastream[i]);
-                    }
-                }else{
-                    //in case less then 2 elements are remaining
-                    partialRes->push_back(datastream[i]);
-                }
+                size_t offset= (n-i>=leafSize)?leafSize: n-i;
+                OrderedArray* partialRes=new OrderedArray(datastream.begin()+i,datastream.begin()+(i+offset));
+                assert(partialRes->size()!=0);
+
+                std::sort(partialRes->begin(),partialRes->end(),
+                [](Record a, Record b){return a.key < b.key;});
+
                 //send into the pipeline
                 ff_send_out(partialRes);
             }
-            std::cout <<"end of stream parser data" << std::endl;
             return EOS;
         };
     private:
@@ -55,11 +54,11 @@ class StreamParser: public ff::ff_node_t<OrderedArray,OrderedArray>
 struct BufferNode: public ff::ff_node_t<OrderedArray,task_t>
 {
     BufferNode(size_t stop_size,OrderedArray** result_ptr)
-        :stop_size(stop_size){
-            this->result_ptr=result_ptr;
-        }
+        :stop_size(stop_size),
+         result_ptr(result_ptr){}
     public:
         task_t* svc(OrderedArray* in){
+            assert(in->size()>0);
             //you received the last ordered array, stop
             if(in->size()==stop_size){
                 *result_ptr=in;
@@ -71,58 +70,79 @@ struct BufferNode: public ff::ff_node_t<OrderedArray,task_t>
                 return GO_ON;
             }
             task_t* res=new task_t(in,bufferedValue);
-
-            
             ff_send_out(res);
-
-
             bufferedValue=nullptr;
 
             return GO_ON;
 
         }
     private:
-        OrderedArray* bufferedValue;
-        OrderedArray** result_ptr;
+        OrderedArray* bufferedValue=nullptr;
+        OrderedArray** result_ptr=nullptr;
         size_t stop_size=0;
 };
 
 struct Worker: public ff::ff_node_t<task_t,OrderedArray>
 {
     OrderedArray* svc(task_t* in){
-        OrderedArray* res=new OrderedArray();
 
-        
+        OrderedArray* res=new OrderedArray();
+        assert(in->first!=nullptr&&in->second!=nullptr);
+
         OrderedArray* arr1=in->first;
         OrderedArray* arr2=in->second;
-        int i = 0, j = 0, k = 0;
+        res->reserve(arr1->size()+arr2->size());
+        int i = 0, j = 0;
+        //std::cout<< "W before" <<  arr1->size() << ":" << arr2->size() << std::endl;
         while (i < arr1->size() && j < arr2->size()) {
-            Record r1= arr1->at(i);
-            Record r2= arr2->at(j);
-
-            if ( r1.key <= r2.key)
-                res->push_back(arr1->at(i++));
-            else
-                res->push_back(arr2->at(j++));
+            res->push_back(
+                ( arr1->at(i).key <= arr2->at(j).key)?
+                    arr1->at(i++)
+                        :
+                    arr2->at(j++)
+            );
         }
         while (i < arr1->size()) res->push_back(arr1->at(i++));
         while (j < arr2->size()) res->push_back(arr2->at(j++));
+
+        delete arr1;
+        delete arr2;
+
         ff_send_out(res);
         return GO_ON;
     }
 };
 
+void parallelFFMergeSort(std::vector<Record>* src,OrderedArray** dst){
+    ff::ff_farm merging_farm;
+
+    size_t numWorkers=numThreads;
+    merging_farm.add_emitter(BufferNode(src->size(),dst));
+    
+    std::vector<ff::ff_node*> farm_workers;
+    for(int i=0;i<numWorkers;i++){
+        farm_workers.push_back(new Worker());
+    }
+    merging_farm.add_workers(farm_workers);
+    merging_farm.wrap_around();
+
+    ff::ff_pipeline pipeline;
+    StreamParser sp(*src);
+    pipeline.add_stage(sp);
+    pipeline.add_stage(&merging_farm);
+
+    if(pipeline.run_and_wait_end()<0){
+        std::cerr << "something went wrong" << std::endl;
+    }
+}
+
 int main(int argc,char*argv[]){
 
-    //parsing arguments
-    size_t arraySize=100;
-    size_t recordSize = 100;
-    int numThreads = 8;
     bool verboseOutput=false;
 
     int opt;
 
-    while ((opt = getopt(argc, argv, "s:r:t:v")) != -1) {
+    while ((opt = getopt(argc, argv, "s:r:t:v:l")) != -1) {
 
         switch (opt) {
             case 's':
@@ -134,12 +154,15 @@ int main(int argc,char*argv[]){
             case 't':
                 numThreads = std::stoi(optarg);
                 break;
+            case 'l':
+                leafSize = std::stoi(optarg);
+                break;
             case 'v':
                 verboseOutput=true;
                 break;
             default:
-            std::cout << "wrong arguments" << std::endl;
-            return EXIT_FAILURE;
+                std::cout << "wrong arguments" << std::endl;
+                return EXIT_FAILURE;
         }
     }
 
@@ -153,8 +176,11 @@ int main(int argc,char*argv[]){
 
 
     std::vector<Record> dataVector(arraySize);
-    std::transform(dataVector.begin(), dataVector.end(), dataVector.begin(),
-                   [&](Record){ 
+    std::transform(
+        dataVector.begin(), dataVector.end(), 
+
+        dataVector.begin(),
+                [&](Record){ 
                     Record r;
                     r.key=keyDis(gen);
                     r.rpayload=(char*)malloc(sizeof(char)*recordSize);
@@ -168,33 +194,13 @@ int main(int argc,char*argv[]){
         std::cout<< "ORIGINAL:" << std::endl;
         unsigned int i=1;
         for(const auto& v:dataVector){
-            std::cout << i++ << ":" << v.key << std::endl;
+            std::cout << "\t" << i++ << ":" << v.key << std::endl;
         }
     }
 
     auto startTime = std::chrono::high_resolution_clock::now();
-    ff::ff_farm merging_farm;
-
-    size_t numWorkers=numThreads;
-
     OrderedArray* result;
-    merging_farm.add_emitter(BufferNode(dataVector.size(),&result));
-    
-    std::vector<ff::ff_node*> farm_workers;
-    for(int i=0;i<numWorkers;i++){
-        farm_workers.push_back(new Worker());
-    }
-    merging_farm.add_workers(farm_workers);
-    merging_farm.wrap_around();
-
-    ff::ff_pipeline pipeline;
-    StreamParser sp(dataVector);
-    pipeline.add_stage(sp);
-    pipeline.add_stage(&merging_farm);
-
-    if(pipeline.run_and_wait_end()<0){
-        std::cerr << "something went wrong" << std::endl;
-    }
+    parallelFFMergeSort(&dataVector,&result);
     auto endTime = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
@@ -202,7 +208,7 @@ int main(int argc,char*argv[]){
         std::cout<< "RESULT:" << std::endl;
         unsigned int i=1;
         for(const auto& v:(*result)){
-            std::cout << i++ << ":" << v.key << std::endl;
+            std::cout << "\t" << i++ << ":" << v.key << std::endl;
         }
     }
     std::cout<< "time(ms):" << duration.count() << std::endl;
