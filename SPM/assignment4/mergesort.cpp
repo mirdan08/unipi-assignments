@@ -9,14 +9,14 @@
 //utility functions
 
 //sequenmtial merge sort implementation
-void sequentialMerge(std::vector<int>& arr, int left, int mid, int right) {
+void sequentialMerge(std::vector<Record>& arr, int left, int mid, int right) {
     // Create temporary arrays
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
-    std::vector<int> L(n1), R(n2);
+    std::vector<Record> L(n1), R(n2);
 
-    // Copy data to temp arrays#include <memory>
+    // Copy data to temp arrays
     for (int i = 0; i < n1; ++i)
         L[i] = arr[left + i];
     for (int j = 0; j < n2; ++j)
@@ -25,7 +25,7 @@ void sequentialMerge(std::vector<int>& arr, int left, int mid, int right) {
     // Merge the temp arrays
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
-        if (L[i] <= R[j])
+        if (L[i].key <= R[j].key)
             arr[k++] = L[i++];
         else
             arr[k++] = R[j++];
@@ -36,7 +36,7 @@ void sequentialMerge(std::vector<int>& arr, int left, int mid, int right) {
     while (j < n2) arr[k++] = R[j++];
 }
 
-void sequentialMergeSort(std::vector<int>& arr, int left, int right) {
+void sequentialMergeSort(std::vector<Record>& arr, int left, int right) {
     if (left < right) {
         int mid = left + (right - left) / 2;
 
@@ -76,7 +76,7 @@ class StreamParser: ff::ff_node_t<OrderedArray,OrderedArray>
     return EOS;
     }
 };
-struct BufferNode: ff::ff_node_t<OrderedArray,task_t>
+struct MasterNode: ff::ff_node_t<OrderedArray,task_t>
 {
     public:
         task_t* svc(OrderedArray* in){

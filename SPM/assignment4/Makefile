@@ -9,6 +9,7 @@ TARGETS    = mergeSortPar mergeSortSeq
 
 # Sources
 COMMON_SRC = mergesort.cpp
+SORT_SRC   = sortSeq.cpp
 SEQ_SRC    = mergeSortSeq.cpp
 PAR_SRC    = mergeSortPar.cpp
 
@@ -16,12 +17,16 @@ PAR_SRC    = mergeSortPar.cpp
 COMMON_OBJ = $(COMMON_SRC:.cpp=.o)
 SEQ_OBJ    = $(SEQ_SRC:.cpp=.o)
 PAR_OBJ    = $(PAR_SRC:.cpp=.o)
+SORT_OBJ   = $(SORT_SRC:.cpp=.o)
 
 .PHONY: all clean cleanall
 .SUFFIXES: .cpp
 
 # Rules
 all: $(TARGETS)
+
+sortSeq: $(SORT_OBJ) $(COMMON_OBJ)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OPTFLAGS) -o $@ $^ $(LDFLAGS)
 
 mergeSortSeq: $(SEQ_OBJ) $(COMMON_OBJ)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OPTFLAGS) -o $@ $^ $(LDFLAGS)

@@ -55,7 +55,8 @@ int main(int argc,char*argv[]){
                     }
                     return r;
                 }
-            );
+        );
+
     if(verboseOutput){
         std::cout<< "ORIGINAL:" << std::endl;
         unsigned int i=1;
@@ -64,7 +65,10 @@ int main(int argc,char*argv[]){
         }
     }
     auto startTime = std::chrono::high_resolution_clock::now();
-    sequentialMergeSort(dataVector,0,dataVector.size());
+    std::sort(
+        dataVector.begin(),dataVector.end(),
+        [](Record a,Record b){return a.key<b.key;}
+    );
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
     std::cout<< "time(ms):" << duration.count() << std::endl;

@@ -8,6 +8,6 @@ struct Record {
     char* rpayload; 
 }; 
 
-void sequentialMerge(std::vector<int>& arr, int left, int mid, int right);
+void sequentialMerge(std::vector<Record>& arr, int left, int mid, int right);
 
-void sequentialMergeSort(std::vector<int>& arr, int left, int right);
+void sequentialMergeSort(std::vector<Record>& arr, int left, int right);
