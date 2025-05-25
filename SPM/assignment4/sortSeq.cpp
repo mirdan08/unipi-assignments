@@ -50,8 +50,7 @@ int main(int argc,char*argv[]){
                 [&](Record){ 
                     Record r;
                     r.key=keyDis(gen);
-                    r.rpayload=(char*)malloc(sizeof(char)*recordSize);
-                    for(int i=0;i<recordSize;i++){
+                    for(int i=0;i<RPAYLOAD;i++){
                         r.rpayload[i]=charDis(gen);
                     }
                     return r;

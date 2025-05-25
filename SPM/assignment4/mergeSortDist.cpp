@@ -131,11 +131,32 @@ bool MPI_Recv_record(Record* r,int source,int tag,MPI_Comm comm,size_t recordSiz
     int op_res;
     op_res=MPI_Recv(&r->key,1,MPI_UNSIGNED_LONG,source,tag,comm,&status);
     if(op_res < 0) return false;
-    r->rpayload=(char*)malloc(sizeof(char)*recordSize);
+    //r->rpayload=(char*)malloc(sizeof(char)*recordSize);
     op_res=MPI_Recv(r->rpayload,recordSize,MPI_CHAR,source,tag,comm,&status);
     if(op_res < 0) return false;
 
     return true;
+}
+
+MPI_Datatype make_mpi_record_type() {
+        MPI_Datatype record_type;
+    
+        Record dummy;
+        MPI_Aint base, displs[2];
+        int block_lengths[2] = {1, RPAYLOAD};
+        MPI_Datatype types[2] = {MPI_UNSIGNED_LONG, MPI_CHAR};
+    
+        MPI_Get_address(&dummy, &base);
+        MPI_Get_address(&dummy.key, &displs[0]);
+        MPI_Get_address(&dummy.rpayload, &displs[1]);
+    
+        displs[0] -= base;
+        displs[1] -= base;
+    
+        MPI_Type_create_struct(2, block_lengths, displs, types, &record_type);
+        MPI_Type_commit(&record_type);
+    
+        return record_type;
 }
 
 int main(int argc,char*argv[]){
@@ -150,25 +171,18 @@ int main(int argc,char*argv[]){
     bool verboseOutput=false;
     
     int opt;
-    MPI_Init(&argc,&argv);
-    int rank,size;
-    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
-    MPI_Comm_size(MPI_COMM_WORLD,&size);
-
-    if(size<2 && rank == 0){
-        std::cout << "please allocate at least 2 nodes"<< std::endl;
-    }
-
+    
+    
     while ((opt = getopt(argc, argv, "s:r:t:v:l:")) != -1) {
-
+        
         switch (opt) {
             case 's': {
-
+                
                 arraySize = std::stoull(optarg);
                 break;
             }
             case 'r': {
-
+                
                 recordSize = std::stoull(optarg);
                 break;
             }
@@ -186,134 +200,70 @@ int main(int argc,char*argv[]){
                 break;
             }
             default:{
-
+                
                 std::cout << "wrong arguments" << std::endl;
                 return EXIT_FAILURE;
             }
         }
     }
-    
     const long STOP_SIGNAL=-1;
-    //master node
+    
+    int rank,size;
+    std::vector<Record> sendVector= spawn_datastream(arraySize,recordSize);
+
+
+    
+    auto startTime = std::chrono::high_resolution_clock::now();
+    MPI_Init(&argc,&argv);
+    MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+    MPI_Comm_size(MPI_COMM_WORLD,&size);
+    long nodeDataSize = std::ceil(arraySize/size);
+    MPI_Datatype record_type=make_mpi_record_type();
+
+    std::vector<Record> recvVector(nodeDataSize);
+    OrderedArray* gatherVector=new OrderedArray(nodeDataSize*size);
     if(rank==0){
-        auto startTime = std::chrono::high_resolution_clock::now();
-        std::vector<Record> dataVector = spawn_datastream(arraySize,recordSize);
         std::cout << "size:" <<arraySize<<"\trecord size:" <<recordSize << "\tthreads:" <<numThreads << std::endl;
         if(verboseOutput){
             std::cout<< "ORIGINAL:" << std::endl;
             unsigned int i=1;
-            for(const auto& v:dataVector){
+            for(const auto& v:sendVector){
                 std::cout << "\t" << i++ << ":" << v.key << std::endl;
             }
         }
-        long nodeDataSize = std::ceil(dataVector.size()/(size-1))+1;
-        //std::cout << "]sending tasks out" << std::endl;
-        unsigned int start_idx=0;
-        unsigned int stop_idx=std::min(nodeDataSize,(long)dataVector.size());
-        for(int dst_idx=1;dst_idx<size;dst_idx++){
-            long taskSize=stop_idx - start_idx;
-            
-            //std::cout << "]sending taskSize " << taskSize << std::endl;
-            MPI_Send(&taskSize,1,MPI_LONG,dst_idx,SPLIT_TAG,MPI_COMM_WORLD);
-            //std::cout << "]sending data"<< std::endl;
-            //statically distribute data to do computations
-            for(int j=start_idx;j<stop_idx;j++){
-                Record& r=dataVector[j];
-                MPI_Send_record(r,dst_idx,SPLIT_TAG,MPI_COMM_WORLD,recordSize);
-            }
-            //std::cout << "]sent"<< std::endl;
-            MPI_Send(&STOP_SIGNAL,1,MPI_LONG,dst_idx,SPLIT_TAG,MPI_COMM_WORLD);
-            //std::cout << "]sent stop signal as well"<< std::endl;
-            start_idx+= nodeDataSize;
-            stop_idx+= std::min(nodeDataSize,(long)dataVector.size()-start_idx);
-        }
-        //std::cout << "]done sending tasks" << std::endl;
+    }
+    MPI_Request request;
+    MPI_Iscatter(
+        sendVector.data()   ,nodeDataSize   ,record_type,
+        recvVector.data()   ,nodeDataSize   ,record_type,0,
+        MPI_COMM_WORLD,
+        &request
+    );
 
-        
-        size_t stop_count=0;
-        std::vector<OrderedArray*> partialMerges;
-        long data_buf_size;
-        MPI_Status status;
+    OrderedArray* res;
+    parallelFFMergeSort(&recvVector,&res,numThreads,leafSize);
 
-        for(int i=1;i<size;i++){
-            OrderedArray* mergingDataVector=new OrderedArray();
-            MPI_Recv(&data_buf_size,1,MPI_LONG,MPI_ANY_SOURCE,MERGE_TAG,MPI_COMM_WORLD,&status);
-            int source = status.MPI_SOURCE;
-            for(int i=0;i<data_buf_size;i++){
-                Record r;
+    MPI_Wait(&request,MPI_STATUS_IGNORE);
+    MPI_Gather(
+        res->data()         ,res->size()   ,record_type,
+        gatherVector->data(),res->size()   ,record_type,0,
+        MPI_COMM_WORLD
+    );
+    if(rank==0){
+        OrderedArray* finalOrderedVector;
+        parallelFFMergeSort(gatherVector,&finalOrderedVector,numThreads,leafSize);
 
-                MPI_Recv_record(&r,source,MERGE_TAG,MPI_COMM_WORLD,recordSize);
-                mergingDataVector->push_back(r);
-            }
-            partialMerges.push_back(mergingDataVector);
-        }
-        //std::cout<< "]gathered back the partial results" << std::endl;
-        size_t numWorkers=std::max(1UL,numThreads/2);
-        
-        ff::ff_farm merging_farm;
-        OrderedArray* result;
-        merging_farm.add_emitter(MasterNode(arraySize,&result));
-        std::vector<ff::ff_node*> farm_workers;
-        for(int i=0;i<numWorkers;i++){
-            farm_workers.push_back(new Worker());
-        }
-        merging_farm.add_workers(farm_workers);
-        merging_farm.wrap_around();
-
-        ff::ff_pipeline pipeline;
-
-
-        ProgessiveMerger pm(partialMerges);
-
-        pipeline.add_stage(pm);
-        pipeline.add_stage(&merging_farm);
-        //std::cout<< "]final merge starting" << std::endl;
-        if(pipeline.run_and_wait_end()<0){
-            std::cerr << "something went wrong" << std::endl;
-        }
         auto endTime = std::chrono::high_resolution_clock::now();
 
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
         if(verboseOutput){
             std::cout<< "RESULT:" << std::endl;
             unsigned int i=1;
-            for(const auto& v:(*result)){
+            for(const auto& v:(*finalOrderedVector)){
                 std::cout << "\t" << i++ << ":" << v.key << std::endl;
             }
         }
         std::cout<< "time(ms):" << duration.count() << std::endl;
-
-    }else{
-        //all other nodes
-        std::vector<Record> partialDataVector;
-        long data_buf_size;
-        MPI_Status status;
-        while(true){
-            MPI_Recv(&data_buf_size,1,MPI_LONG,0,SPLIT_TAG,MPI_COMM_WORLD,&status);
-            if(data_buf_size==STOP_SIGNAL)
-                break;
-            //std::cout << rank <<">recevied "   << data_buf_size << std::endl;
-            for(int i=0;i<data_buf_size;i++){
-                Record r;
-                MPI_Recv_record(&r,0,SPLIT_TAG,MPI_COMM_WORLD,recordSize);
-                partialDataVector.push_back(r);
-            }
-        }
-
-        OrderedArray* result;
-        //std::cout<< rank<<">start ordering t:" << numThreads << " ls:" << leafSize << std::endl;
-        parallelFFMergeSort(&partialDataVector,&result,numThreads,leafSize);
-        //std::cout<< rank<<">done ordering" << std::endl;
-        long res_size=result->size();
-        MPI_Send(&res_size,1,MPI_LONG,0,MERGE_TAG,MPI_COMM_WORLD);
-        
-        for(int j=0;j<result->size();j++){
-            Record& r=result->at(j);
-            MPI_Send_record(r,0,MERGE_TAG,MPI_COMM_WORLD,recordSize);
-        }
-        
-        //std::cout<< rank<<">done sending" << std::endl;
-        
     }
     MPI_Finalize();
     return 0;

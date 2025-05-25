@@ -65,33 +65,18 @@ struct Worker: public ff::ff_node_t<task_t,OrderedArray>
 {
     public:
         OrderedArray* svc(task_t* in){
-
             OrderedArray* res;
             OrderedArray* arr1=in->first;
             OrderedArray* arr2=in->second;
-
-            if(arr1->at(arr1->size()-1).key<arr2->at(0).key){
-                arr1->insert(arr1->end(),arr2->begin(),arr2->end());
-                res=arr1;
-                delete arr2;
-            }
-            else if(arr2->at(arr2->size()-1).key<arr1->at(0).key){
-                arr2->insert(arr2->end(),arr1->begin(),arr1->end());
-                res=arr2;
-                delete arr1;
-            }else{
-                res=new OrderedArray();
-                res->resize(arr1->size()+arr2->size());
-                std::merge(
-                    arr1->begin(),arr1->end(),
-                    arr2->begin(),arr2->end(),
-                    res->begin(),
-                    [](Record a,Record b){return a.key< b.key;}
-                );
-                delete arr1;
-                delete arr2;
-            }
-
+            res=new OrderedArray(arr1->size()+arr2->size());
+            std::merge(
+                arr1->begin(),arr1->end(),
+                arr2->begin(),arr2->end(),
+                res->begin(),
+                [](Record a,Record b){return a.key< b.key;}
+            );
+            delete arr1;
+            delete arr2;
             ff_send_out(res);
             return GO_ON;
         }
@@ -107,26 +92,19 @@ struct SortingWorker: public ff::ff_monode_t<std::vector<Record>,OrderedArray>{
         return in;
     }
 };
-
+//progressive merger
 void parallelFFMergeSort(std::vector<Record>* src,OrderedArray** dst,size_t numThreads,size_t leafSize){
-    ff::ff_farm merging_farm;
-
     ff::ff_farm sorting_farm;
-
     std::vector<ff::ff_node*> sorting_workers;
-
-    size_t numSorters=std::max(1UL,numThreads/2);
-
+    size_t numSorters=numThreads;
     for(int i=0;i<numSorters;i++){
         sorting_workers.push_back(new SortingWorker());
     }
     sorting_farm.add_workers(sorting_workers);
     sorting_farm.remove_collector();
-
-
-    size_t numWorkers=std::max(1UL,numThreads/2);
+    ff::ff_farm merging_farm;
     merging_farm.add_emitter(MasterNode(src->size(),dst));
-    
+    size_t numWorkers=numThreads;
     std::vector<ff::ff_node*> farm_workers;
     for(int i=0;i<numWorkers;i++){
         farm_workers.push_back(new Worker());
@@ -137,9 +115,6 @@ void parallelFFMergeSort(std::vector<Record>* src,OrderedArray** dst,size_t numT
     merging_farm.wrap_around();
 
     ff::ff_pipeline pipeline;
-
-
-
     StreamParser sp(*src,leafSize);
     pipeline.add_stage(sp);
     pipeline.add_stage(&sorting_farm);
@@ -149,6 +124,41 @@ void parallelFFMergeSort(std::vector<Record>* src,OrderedArray** dst,size_t numT
         std::cerr << "something went wrong" << std::endl;
     }
 }
+
+void parallelFFMergeSort2(std::vector<Record>* src,OrderedArray** dst,size_t numThreads){
+    
+    
+    ff::ff_farm sorting_farm;
+    std::vector<ff::ff_node*> sorting_workers;
+    size_t numSorters=numThreads;
+    for(int i=0;i<numSorters;i++){
+        sorting_workers.push_back(new SortingWorker());
+    }
+    sorting_farm.add_workers(sorting_workers);
+    sorting_farm.remove_collector();
+    ff::ff_farm merging_farm;
+    merging_farm.add_emitter(MasterNode(src->size(),dst));
+    size_t numWorkers=numThreads;
+    std::vector<ff::ff_node*> farm_workers;
+    for(int i=0;i<numWorkers;i++){
+        farm_workers.push_back(new Worker());
+    }
+    merging_farm.add_workers(farm_workers);
+    merging_farm.remove_collector();
+    merging_farm.set_scheduling_ondemand();
+    merging_farm.wrap_around();
+
+    ff::ff_pipeline pipeline;
+    StreamParser sp(*src,src->size()/numWorkers);
+    pipeline.add_stage(sp);
+    pipeline.add_stage(&sorting_farm);
+    pipeline.add_stage(&merging_farm);
+
+    if(pipeline.run_and_wait_end()<0){
+        std::cerr << "something went wrong" << std::endl;
+    }
+}
+
 std::vector<Record> spawn_datastream(size_t arraySize,size_t recordSize,unsigned int seed){
     std::mt19937 gen(seed); 
 
@@ -164,8 +174,8 @@ std::vector<Record> spawn_datastream(size_t arraySize,size_t recordSize,unsigned
                 [&](Record){ 
                     Record r;
                     r.key=keyDis(gen);
-                    r.rpayload=(char*)malloc(sizeof(char)*recordSize);
-                    for(int i=0;i<recordSize;i++){
+                    //r.rpayload=(char*)malloc(sizeof(char)*recordSize);
+                    for(int i=0;i<RPAYLOAD;i++){
                         r.rpayload[i]=charDis(gen);
                     }
                     return r;

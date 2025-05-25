@@ -2,9 +2,11 @@
 #include <ff/ff.hpp>
 #include <mpi.h>
 
+const unsigned int RPAYLOAD=1;
+
 struct Record { 
     unsigned long key;  // sorting value 
-    char* rpayload; 
+    char rpayload[RPAYLOAD]; 
 }; 
 
 void sequentialMerge(std::vector<Record>& arr, int left, int mid, int right);

@@ -23,16 +23,16 @@ make mergeSortDist
 echo "iteration,leaf_size,num_threads,payload_size,array_size,mpi_nodes,ff_par_time,sort_time,dist_time"
 
 for i in $(seq 1 $trials); do
-    for n in "${num_threads[@]}"; do
+    for nn in "${node_size[@]}"; do
         for as in "${array_size[@]}"; do
             for ps in "${payload_size[@]}"; do
-                for nn in "${node_size[@]}"; do
+                for n in "${num_threads[@]}"; do
                     sort_output="$(./sortSeq -s $as -r $ps)"
                     sort_time=$(echo "$sort_output" | tail -n 1 | cut -d':' -f2)
 
                     for ls in "${leaf_size[@]}"; do
                         # Run distributed MPI job with $nn nodes
-                        dist_par_output=$(srun --nodes=$nn --ntasks=$nn ./mergeSortDist -s $as -r $ps -l $ls -t $n -v 0)
+                        dist_par_output=$(mpirun -N=$nn ./mergeSortDist -s $as -r $ps -l $ls -t $n -v 0)
                         dist_par_time=$(echo "$dist_par_output" | tail -n 1 | cut -d':' -f2)
 
                         ff_par_output=$(./mergeSortPar -s $as -r $ps -l $ls -t $n -v 0)
