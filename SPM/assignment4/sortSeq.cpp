@@ -17,7 +17,7 @@ int main(int argc,char*argv[]){
     bool verboseOutput=false;
 
     int opt;
-    while ((opt = getopt(argc, argv, "s:r:v")) != -1) {
+    while ((opt = getopt(argc, argv, "s:r:v:")) != -1) {
 
         switch (opt) {
             case 's':
@@ -26,8 +26,9 @@ int main(int argc,char*argv[]){
             case 'r':
                 recordSize = std::stoull(optarg);
                 break;
-            case 'v':
-                verboseOutput=true;
+                case 'v':
+                verboseOutput= std::stoull(optarg)==1 ? true : false;
+
                 break;
             default:
             std::cout << "wrong arguments" << std::endl;
@@ -71,7 +72,6 @@ int main(int argc,char*argv[]){
     );
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    std::cout<< "time(ms):" << duration.count() << std::endl;
     if(verboseOutput){
         std::cout<< "RESULT:" << std::endl;
         unsigned int i=1;
@@ -79,4 +79,5 @@ int main(int argc,char*argv[]){
             std::cout << i++ << ":" << v.key << std::endl;
         }
     }
+    std::cout<< "time(ms):" << duration.count() << std::endl;
 }
