@@ -13,6 +13,8 @@
 #include <mpi.h>
 #include <ff/ff.hpp>
 #include <cassert>
+#include <mutex>
+#include <condition_variable>
 
 struct SortingWorker: public ff::ff_monode_t<std::vector<Record>,OrderedArray>{
     OrderedArray* svc(std::vector<Record>* in){
@@ -114,30 +116,6 @@ class ProgessiveMerger: public ff::ff_node_t<OrderedArray,OrderedArray>
         std::vector<OrderedArray*>& datastream;
 };
 
-bool MPI_Send_record(Record& r,int dest,int tag,MPI_Comm comm,size_t recordSize){
-    int op_res;
-
-    op_res=MPI_Send(&r.key,1,MPI_UNSIGNED_LONG,dest,tag,comm);
-    if (op_res < 0) return false;
-    
-    op_res=MPI_Send(r.rpayload, recordSize,MPI_CHAR,dest,tag,comm);
-    if (op_res < 0) return false;
-
-    return true;
-}
-
-bool MPI_Recv_record(Record* r,int source,int tag,MPI_Comm comm,size_t recordSize){
-    MPI_Status status;
-    int op_res;
-    op_res=MPI_Recv(&r->key,1,MPI_UNSIGNED_LONG,source,tag,comm,&status);
-    if(op_res < 0) return false;
-    //r->rpayload=(char*)malloc(sizeof(char)*recordSize);
-    op_res=MPI_Recv(r->rpayload,recordSize,MPI_CHAR,source,tag,comm,&status);
-    if(op_res < 0) return false;
-
-    return true;
-}
-
 MPI_Datatype make_mpi_record_type() {
         MPI_Datatype record_type;
     
@@ -158,6 +136,47 @@ MPI_Datatype make_mpi_record_type() {
     
         return record_type;
 }
+
+
+class DynamicBufferNode : public ff::ff_node_t<OrderedArray,OrderedArray> {
+    public:
+    DynamicBufferNode(size_t stop_size):stop_size(stop_size),acc_size(0){}
+        // Called from outside, thread-safe
+        void add_data(const OrderedArray& data) {
+            {
+                std::lock_guard<std::mutex> lk(mtx);
+                buffer.push(data);
+            }
+            cv.notify_one();
+        }
+    
+        OrderedArray* svc(OrderedArray *) override {
+            while (true) {
+
+                std::unique_lock<std::mutex> lk(mtx);
+                cv.wait(lk, [this]() { return !buffer.empty() || (stop_size<acc_size); });
+                auto data = buffer.front();
+                acc_size+=data.size();
+                buffer.pop();
+                lk.unlock();
+
+                auto* data_ptr = new OrderedArray(std::move(data));
+                ff_send_out(data_ptr);
+                if (acc_size==stop_size || buffer.empty()) {
+                    break;
+                }
+
+            }
+            return EOS;
+        }
+    private:
+        std::mutex mtx;
+        std::condition_variable cv;
+        std::queue<OrderedArray> buffer;
+        DynamicBufferNode();
+        size_t stop_size;
+        size_t acc_size=0;
+};
 
 int main(int argc,char*argv[]){
     size_t arraySize=100;
@@ -217,11 +236,13 @@ int main(int argc,char*argv[]){
     MPI_Init(&argc,&argv);
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
     MPI_Comm_size(MPI_COMM_WORLD,&size);
-    long nodeDataSize = std::ceil(arraySize/size);
+    size_t nodeDataSize = std::ceil(arraySize/size);
     MPI_Datatype record_type=make_mpi_record_type();
 
     std::vector<Record> recvVector(nodeDataSize);
     OrderedArray* gatherVector=new OrderedArray(nodeDataSize*size);
+    std::vector<int> sendcounts(size);
+    std::vector<int> displs(size);
     if(rank==0){
         std::cout << "size:" <<arraySize<<"\trecord size:" <<recordSize << "\tthreads:" <<numThreads << std::endl;
         if(verboseOutput){
@@ -231,27 +252,74 @@ int main(int argc,char*argv[]){
                 std::cout << "\t" << i++ << ":" << v.key << std::endl;
             }
         }
+
+
+
+        displs[0] = 0;
+        sendcounts[0]= std::min(nodeDataSize,sendVector.size());
+        for (int i = 1; i < size; ++i) {
+            sendcounts[i]=std::min(nodeDataSize, arraySize- i*nodeDataSize);
+            displs[i] = displs[i - 1] + sendcounts[i - 1];
+        }
     }
     MPI_Request request;
-    MPI_Iscatter(
-        sendVector.data()   ,nodeDataSize   ,record_type,
+
+
+
+
+    MPI_Scatterv(
+        sendVector.data(),sendcounts.data(),displs.data()  ,record_type,
         recvVector.data()   ,nodeDataSize   ,record_type,0,
-        MPI_COMM_WORLD,
-        &request
+        MPI_COMM_WORLD
     );
+
 
     OrderedArray* res;
     parallelFFMergeSort(&recvVector,&res,numThreads,leafSize);
-
-    MPI_Wait(&request,MPI_STATUS_IGNORE);
-    MPI_Gather(
+    std::cout << rank << ">done ordering my portion" << std::endl;
+    MPI_Gatherv(
         res->data()         ,res->size()   ,record_type,
-        gatherVector->data(),res->size()   ,record_type,0,
+        gatherVector->data(),sendcounts.data(),displs.data(),record_type,0,
         MPI_COMM_WORLD
     );
+
     if(rank==0){
+
+        int flag=0;
+        size_t recv_count=0;
+        MPI_Status status;
+        std::vector<OrderedArray*> partialRes;
+        for(int i=0;i<size;i++){
+            partialRes.push_back(
+                new OrderedArray(
+                    gatherVector->begin()+displs[i],
+                    gatherVector->begin()+displs[i]+sendcounts[i]
+                )
+            );
+        }
+        //building the FF parallel merger
+        ProgessiveMerger pm(partialRes);
+
+
+        ff::ff_farm merging_farm;
         OrderedArray* finalOrderedVector;
-        parallelFFMergeSort(gatherVector,&finalOrderedVector,numThreads,leafSize);
+        merging_farm.add_emitter(MasterNode(arraySize,&finalOrderedVector));
+        size_t numWorkers=numThreads;
+        std::vector<ff::ff_node*> farm_workers;
+        for(int i=0;i<numWorkers;i++){
+            farm_workers.push_back(new Worker());
+        }
+        merging_farm.add_workers(farm_workers);
+        merging_farm.remove_collector();
+        merging_farm.set_scheduling_ondemand();
+        merging_farm.wrap_around();
+        ff::ff_pipeline pipeline;
+
+        pipeline.add_stage(&pm);
+        pipeline.add_stage(&merging_farm);
+        if(pipeline.run_and_wait_end()<0){
+            std::cerr << "something went wrong" << std::endl;
+        }
 
         auto endTime = std::chrono::high_resolution_clock::now();
 
