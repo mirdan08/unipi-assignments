@@ -4,8 +4,10 @@
 
 #ifndef MERGESORT_HPP
 #define MERGESORT_HPP
-const unsigned int RPAYLOAD=1;
-
+// Default RPAYLOAD if not defined by compiler flags
+#ifndef RPAYLOAD
+#define RPAYLOAD 32
+#endif
 struct Record { 
     unsigned long key;  // sorting value 
     char rpayload[RPAYLOAD]; 
