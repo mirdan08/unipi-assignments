@@ -4,7 +4,7 @@ MPICXX     = mpicxx -std=c++20
 INCLUDES   = -Ifastflow/
 CXXFLAGS  += -Wall 
 LDFLAGS    = -pthread -fopenmp -Wall -Wextra
-OPTFLAGS   = -O3 -ffast-math -DNDEBUG
+OPTFLAGS   = -O3 -ffast-math -DNDEBUG -ftree-vectorize -march=native -funroll-loops
 
 # Targets
 TARGETS    = mergeSortPar mergeSortSeq mergeSortDist sortSeq
