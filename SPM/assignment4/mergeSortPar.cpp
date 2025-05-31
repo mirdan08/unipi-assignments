@@ -13,7 +13,6 @@
 #include <memory>
 #include <ff/ff.hpp>
 
-
 int main(int argc,char*argv[]){
     size_t arraySize=100;
     size_t recordSize=100;
@@ -70,16 +69,18 @@ int main(int argc,char*argv[]){
     }
 
     auto startTime = std::chrono::high_resolution_clock::now();
-    OrderedArray* result;
-    parallelFFMergeSort(&dataVector,&result,numThreads,leafSize);
+    PosKeyVec* result;
+    
+    auto pipeline=spawn_ff_merging_pipeline(dataVector,&result,numThreads,numThreads,leafSize);
+    pipeline->run_then_freeze();
+    while(!pipeline->done()){}
     auto endTime = std::chrono::high_resolution_clock::now();
-
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
     if(verboseOutput){
         std::cout<< "RESULT:" << std::endl;
         unsigned int i=1;
         for(const auto& v:(*result)){
-            std::cout << "\t" << i++ << ":" << v.key << std::endl;
+            std::cout << "\t" << i++ << ":" << v.second << std::endl;
         }
     }
     std::cout<< "time(ms):" << duration.count() << std::endl;
