@@ -1,6 +1,5 @@
 #include<vector>
 #include <ff/ff.hpp>
-#include <mpi.h>
 
 #ifndef MERGESORT_HPP
 #define MERGESORT_HPP

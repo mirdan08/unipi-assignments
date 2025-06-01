@@ -4,7 +4,6 @@
 #include "mergesort.hpp"
 #include<iostream>
 #include<random>
-#include<mpi.h>
 
 class StreamParser: public ff::ff_node_t<OrderedArray,PosKeyVec>
 {

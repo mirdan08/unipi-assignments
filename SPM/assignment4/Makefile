@@ -4,7 +4,7 @@ MPICXX     = mpicxx -std=c++20
 INCLUDES   = -Ifastflow/
 CXXFLAGS  += -Wall 
 LDFLAGS    = -pthread -fopenmp -Wall -Wextra
-OPTFLAGS   = -O3 -ffast-math -DNDEBUG -ftree-vectorize -march=native -funroll-loops
+OPTFLAGS   = -O3 -ffast-math -DNDEBUG
 
 RPAYLOAD ?= 32
 
@@ -45,6 +45,8 @@ mergeSortDist: $(MPI_OBJ) $(COMMON_OBJ)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -DRPAYLOAD=$(RPAYLOAD) $(INCLUDES) $(OPTFLAGS) -c $< -o $@
+mergeSortDist.o: mergeSortDist.cpp
+	$(MPICXX) $(CXXFLAGS) -DRPAYLOAD=$(RPAYLOAD) $(INCLUDES) $(OPTFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(TARGETS)
