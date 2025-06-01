@@ -1,11 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=mpi_benchmark_ass4
-#SBATCH --output=benchmark_output_%j.log
-#SBATCH --time=00:30:00
-#SBATCH --nodes=8
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=32
-#SBATCH --exclusive
 
 leaf_size=(100 10000 100000)
 num_threads=(1 2 4 8 16 32)
@@ -20,40 +13,33 @@ echo "iteration,leaf_size,num_threads,payload_size,array_size,mpi_nodes,ff_par_t
 for i in $(seq 1 $trials); do
     for ps in "${payload_size[@]}"; do
         make cleanall >/dev/null 2>&1
-        make mergeSortPar RPAYLOAD=$ps >/dev/null 2>&1
-        make sortSeq RPAYLOAD=$ps >/dev/null 2>&1
-        make mergeSortDist RPAYLOAD=$ps >/dev/null 2>&1
+        make mergeSortPar RPAYLOAD="$ps" >/dev/null 2>&1
+        make sortSeq RPAYLOAD="$ps" >/dev/null 2>&1
+        make mergeSortDist RPAYLOAD="$ps" >/dev/null 2>&1
         for nn in "${node_size[@]}"; do
             for as in "${array_size[@]}"; do
                 for n in "${num_threads[@]}"; do
-                    sort_output="$(srun --nodes=1 \
-                            --ntasks-per-node=1 \
-                            --time=00:2:00 \
-                            --mpi=pmix  \
-                            ./mergeSortDist -s $as -r $ps)"
+                    # Run srun for sortSeq and filter out srun messages
+                    sort_output=$(srun --time=00:5:00 ./sortSeq -s "$as" -r "$ps" 2>&1 | tail -n 1 | cut -d':' -f2 )
                     sort_time=$(echo "$sort_output" | tail -n 1 | cut -d':' -f2)
 
                     for ls in "${leaf_size[@]}"; do
-                       dist_par_output="$(srun --nodes=$nn \
-                            --ntasks-per-node=1 \
-                            --time=00:2:00 \
-                            --mpi=pmix  \
-                            ./mergeSortDist -s $as -r $ps -l $ls -t $n -v 0)"
-
+                        # Run distributed parallel merge sort
+                        dist_par_output=$(srun --mpi=pmix --cpu-bind=none -N $nn -n $nn  --time=00:5:00 --mpi=pmix ./mergeSortDist -s "$as" -r "$ps" -l "$ls" -t "$n" -v 0 2>&1 | tail -n 1 | cut -d':' -f2)
                         dist_par_time=$(echo "$dist_par_output" | tail -n 1 | cut -d':' -f2)
 
-
-                        ff_par_output="$(srun --nodes=1 \
-                            --ntasks-per-node=1 \
-                            --time=00:2:00 \
-                            --mpi=pmix  \
-                            ./mergeSortDist -s $as -r $ps -l $ls -t $n -v 0)"
+                        # Run fork-join parallel merge sort
+                        ff_par_output=$(srun --time=00:5:00 ./mergeSortPar -s "$as" -r "$ps" -l "$ls" -t "$n" -v 0 2>&1 | tail -n 1 | cut -d':' -f2)
                         ff_par_time=$(echo "$ff_par_output" | tail -n 1 | cut -d':' -f2)
 
-                        echo "$i,$ls,$n,$ps,$as,$nn,$ff_par_time,$sort_time,$dist_par_time"
+                        line="$i,$ls,$n,$ps,$as,$nn,$ff_par_time,$sort_time,$dist_par_time"
+                        echo "$line"
+                        results+="$line"$'\n'
                     done
                 done
             done
         done
     done
 done
+
+echo "$line"
