@@ -1,0 +1,210 @@
+- Intro
+	- parallel machine types
+	- power reduction using parallelism
+- performance engineering
+	- vectorization with compiler
+	- AVX instructions
+- classification
+	- Flynn taxonomy
+		- SISD,MIMD,SIMD,MISD with their characteristics
+	- memory based classification
+		- SHM
+		- NUMA
+	- DM and SHM systems versions 
+- slurm
+	- backfill algorithm
+	- commands
+- Shared memory systems
+	- von neumann bottleneck
+	- memory hierarchy
+	- locality principle
+	- caches and cahe hits
+		- cache algorithms
+			- cache write policies
+			- cache coherence
+		- cache aware algorithms
+	- vector units
+	- HW multi threading
+	- paralleism on a modern CPU(ILP,SIMD multi core)
+		- multi core:
+			- data races
+			- false sharing
+			- roofline model
+- SIMD on CPU
+	- vector units
+	- vector operations
+		- FMA
+	- hierarchy of programming vector units
+	- intrinsics
+		- AVX
+		- aligned operations
+		- Fused multiply add
+		- divergence(if statements = bad)
+			- predication with masking elements
+	-  AoS and SoA layout
+	- auto vectorization
+		- pragma directive
+	- loop iteration dependencies
+	- aliasing and resitrict types
+	- loop unrolling
+- SIMT on GPUs
+	- SIMT execution model
+	- nvidia SMs
+	- gpu memory types
+	- CUDA
+		- programming concepts
+		- execution model
+		- programming model
+		- synchronization
+			- within threads
+			- with cpu
+		- data movement
+		- blocks, threads and grids
+		- kernels
+		- compilation
+		- declarations on functions
+- performance metrics and laws
+	- system metrics
+		- latency,completition time and service time, thorugh inter arrival time
+		- speedup
+		- efficiency
+		- scalability
+			- strong
+			- weak
+		- computation to communication ratio
+		- amdahl's law
+			- derivation
+			- limits of the law
+		- scaled speedup law
+		- gustafson law
+		- scaled speedup gamma parametrized
+- models of computation
+	- work span model
+		- brent's theeorem
+	- PRAM
+		- variants
+	- BSP model
+- concurrency basics
+	- type deduction
+	- move semantics
+	- functors
+	- lambdas 
+	- threads
+		- spawn,join and caveats
+	- promises and futures
+		- onse shot notification
+	- packaged tasks
+	- async
+	- mutex
+	- locks
+		- locking methods
+	- prod cons pattern
+		- MR SW pattern 
+- work load balancing
+	- data partioning
+	- data distribution policies
+		- static
+			- block 
+			- cyclic
+			- block cyclic
+			- irregular data and unbalanced workload issues
+		- dynamic
+			- thread pool pattern and concept
+	- task size selection
+- lock free basics
+	- atomics
+	- livelock,wait freedom obstruction freedom
+	- atomic type in C++
+	- compare and swap
+	- memory consistency models
+		- ordering of operations
+		- coherence and consistency
+			- four types of ordering
+			- program order
+			- Sequential consistency
+			- relaxes consistency
+				- Total store ordering
+			- fences
+			- data race free guarantees
+		- atomic types for consistency and relaxation
+		- spin lock
+		- barrier and spin barrier
+		- MPMC queue
+		- work sharing and thread pool
+- OpenMP
+	- execution model
+	- memory model
+	- directives
+		- parallel directive
+			- schedule clause
+			- collapse
+		- worksharing directive
+		- varirables scope sharing and private
+		- nested parallelism
+		- reduction clause
+	- sections
+	- synchronization constructs
+	- tasks
+		- taskloop
+- distributed memory systems
+	- interconnection networks
+	- netowrk performance metrics nad terminology
+	- topologies types
+		- linear array
+		- 2D mesh
+		- 2D torus
+		- binary tree
+		- hypercube
+		- fat tree
+		- dragonfly
+	- message passin semantics
+	- topologies evaluation
+	- async VS sync communication
+	- input nonnon determinism
+	- linear communication model
+	- computation to communication overlap
+	- communicatioin patterns
+	- PCAM approach to parallelizing
+- Structured parallel programming
+	- strucutred vs unstructured
+	- basic termniology
+	- reason of adopting this
+	- Stream parllelism and definitions
+		- pipeline
+			- cost model
+			- optimal number of stages
+			- optimal number of workers
+		- farm
+			- cost model
+			- optimal number of workers
+			- implemntation skeletons with collectors and emitters
+		- task scheduling
+			- work sharing work stealing and input ordering preservation
+			- stateful computations
+		- nesting of pipeline and farms
+		- types of ttasks
+			- eso stream
+			- endo stream
+		- normal form
+		- data parallel patterns
+			- map 
+				- implementation
+					- binary  tree like scatter
+					- binary tree like gather
+					- parallel file systems benefits
+				- cost model
+				- number of workers
+			- reduce
+				- implementation
+					- ring based 
+					- tree based
+				- all reduce
+				- cost model
+			- map + reduce
+			- stencil
+				- cost model 
+				- irregular stencils
+			- divide and conquer
+				- implemenmtation
+					- balanced vs unbalanced
+				- cost model

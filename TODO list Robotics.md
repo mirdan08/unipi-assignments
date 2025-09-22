@@ -1,0 +1,135 @@
+- robot mechanics and kinematics
+	- definition of robot
+	- autonomous Vs non atonomous robots
+	- robots components
+		- physical body
+		- sensors
+		- effectors and actuators
+	 - degrees of freedom defintion
+		 - for rigid body: translation + rotation
+		 - total  DOFs
+		 - contrallable and uncontrollable DOFs
+		 - types
+			 - holonomic
+			 - non holonomic
+			 - redudant
+		- relation with joints
+			- normal jiunt
+				- types:
+					- revoluting
+					- prmastic
+			- joint-link couple= robot DOF
+			- link 0
+		 - open kinematic chain definition
+		 - robot manipulator
+			 - types
+				 - rotatinal
+				 - spherical
+				 - SCARA 
+				 - cilindrical
+				 - cartesian
+	- spaces
+			- joint space
+			- cartesian space
+		- PUMA manipulator
+		- workspaces
+			- reachable workspace
+			- dextrous workspace	
+	 - representing positon and orientation
+		 - rigid body motion in the plane
+		 - rotation matreices
+			 - fundamental rotation matrices
+			 - homogenous transformation matrices
+			 - homogenous rotation matrices
+	 - robot kinematics
+		 - direct
+		 - inverse
+		 - redundancy degrees
+	- reference frame transformation
+	- geometric manipulator model
+	- URDF
+	- denavit hartenberg representation
+		- algorithm
+	- link coordinates and their geometric parameters
+	- inverse kinematics
+- robot behaviour
+	- general high-level low-level architectures
+	- robotic paradigms
+		- hierarchical
+			- nested hierarchical
+		- reactive 
+		- behaviour based
+		- hybrid paradigm
+	- robot primitives
+		- SENSE
+		- PLAN
+		- ACT
+	- describing paradigms
+	- architecture sub sumption
+	- potential fields behaviour
+- sensors
+	- transducer
+	- sensor
+	- transfer function
+	- calibration
+	- linearity
+	- hysteresis
+	- accuracy
+	- repeatability
+	- resolution
+	- sensitiviness
+	- noise
+	- stability
+	- role in a robot
+		- external state
+		- internal state
+	- position sensors
+		- mechanical switches
+		- optical encoders
+			- absolute encoder
+		- potentiometers
+- robot control
+	- actuator and control system
+	- relation between joint position and encoder position
+	- closed loop feedback control
+	- PID control
+		- PID controller
+	- manipulator robot motion
+		- trajectory planning
+			- trajecotries in joint spaces
+			- trajectory in operational space
+			- general scheme of robot control in joint space
+			- PD position control 
+			- robot dynamic model
+	 - motion control in operational space
+- navigation
+	- localization
+		- odometry
+		- active beacons
+		- map based
+		- landmarks
+			- underwater robot kinematics
+	- maps/models
+		- metric maps
+			- occuapncy grid
+			- geometric description
+		- topological maps
+			- points of interesents & objects
+	- planning
+		- path planning
+			- visibility graph
+			- voronoi diagram
+			- cell decomposition
+		- path following
+			- potential fields
+		- actuator control
+			- position control
+			- velocity control
+- neurocontrollers
+	- IK using a NN
+	- IK static solution learning
+		- IK NN based controller
+		- trajecotry generation
+		- learning and predition
+			- prediction with delays
+			- online predition
