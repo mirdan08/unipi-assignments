@@ -13,4 +13,6 @@ A series of exercises to try some of the concepts learned from the Continual Lea
 ### SPM
 This folder contains the assignments done for the Parallel & distributed systems course:
 - implementation of the softmax function using AVX and autovectorization.
-- implemntation of static and dynamic shceduling strategy to find the maximum collatz steps for a set of rages of values.
+- implementation of static and dynamic shceduling strategy to find the maximum collatz steps for a set of rages of values.
+- implementation of a parallel compression/decompression algorithm using OMP and miniz.
+- implementation of a parallel and distributed version of the mergesort algorithm using FastFlow an MPI(works but misses the README.md file and was not delivered).
